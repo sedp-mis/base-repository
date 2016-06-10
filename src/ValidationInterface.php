@@ -1,6 +1,6 @@
 <?php
 
-namespace SedpMis\Base\Repository;
+namespace SedpMis\BaseRepository;
 
 interface ValidationInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace SedpMis\Base\Repository;
+namespace SedpMis\BaseRepository;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;

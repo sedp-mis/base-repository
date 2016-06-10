@@ -1,6 +1,6 @@
 <?php
 
-namespace SedpMis\Base\Repository;
+namespace SedpMis\BaseRepository;
 
 use Services\Validation\ValidationFailedException;
 use Validator;
