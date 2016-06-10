@@ -1,0 +1,20 @@
+{
+    "name": "sedp-mis/base-repository",
+    "description": "Abstraction for model repository",
+    "keywords": ["repository", "base repository", "model repository"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arjon Jason Castro",
+            "email": "ajcastro29@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SedpMis\\Base\\Repository\\": "src/"
+        }
+    }
+}
