@@ -29,4 +29,6 @@ interface RepositoryInterface
     public function update(array $attributes, $id = null);
 
     public function delete($model);
+
+    public function has($relation, $operator = '>=', $count = 1);
 }

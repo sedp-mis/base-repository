@@ -22,6 +22,13 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     protected $eagerLoadRelations = [];
 
     /**
+     * Query to fetch model.
+     *
+     * @var \Illuminate\Database\Eloquent\Builder
+     */
+    protected $query;
+
+    /**
      * Update model when id or primary key exists in model attributes, instead inserting new model.
      *
      * @var bool
@@ -76,7 +83,9 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     protected function eagerLoadRelations()
     {
-        return $this->model->with($this->eagerLoadRelations);
+        $query = $this->query ?: $this->model;
+
+        return $query->with($this->eagerLoadRelations);
     }
 
     /**
@@ -441,5 +450,22 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         if (!empty($ids)) {
             return $this->model->destroy($ids);
         }
+    }
+
+    /**
+     * Query model if it has a given relation.
+     *
+     * @param  string  $relation
+     * @param  string  $operator
+     * @param  int     $count
+     * @return $this
+     */
+    public function has($relation, $operator = '>=', $count = 1)
+    {
+        $query = $this->query ?: $this->model;
+
+        $this->query = $query->has($relation, $operator, $count);
+
+        return $this;
     }
 }
