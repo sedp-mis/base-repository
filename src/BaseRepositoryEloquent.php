@@ -468,4 +468,24 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
 
         return $this;
     }
+
+    /**
+     * Return the underlying query.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function query()
+    {
+        return $this->query;
+    }
+
+    /**
+     * Return the underlying model.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function model()
+    {
+        return $this->model;
+    }
 }
