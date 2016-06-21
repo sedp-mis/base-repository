@@ -476,7 +476,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function query()
     {
-        return $this->query;
+        return $this->eagerLoadRelations();
     }
 
     /**
