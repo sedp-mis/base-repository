@@ -298,7 +298,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         // Run some manipulation before saving model.
         $this->beforeSaveModel($model);
 
-        $saved = $model->saveModel();
+        $saved = $model->save();
 
         if (!$this->isSaveRecursive) {
             return $saved;
