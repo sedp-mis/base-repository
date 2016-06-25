@@ -7,5 +7,11 @@ php:
   - hhvm
   - nightly
 
-before_script: composer install
+services:
+  - mysql
+
+before_script: 
+  - composer install
+  - mysql -e "CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secret'; GRANT ALL PRIVILEGES ON * . * TO 'homestead'@'localhost'; FLUSH PRIVILEGES;"
+  
 script: ./vendor/bin/phpunit
