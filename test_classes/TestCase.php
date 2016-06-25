@@ -44,7 +44,11 @@ class TestCase extends PHPUnit_Framework_TestCase
 
     public function pdoExec($sql)
     {
-        $pdo = new PDO('mysql:host=localhost', 'homestead', 'secret');
+        $driver   = $this->db['driver'];
+        $host     = $this->db['host'];
+        $username = $this->db['username'];
+        $password = $this->db['password'];
+        $pdo = new PDO("{$driver}:host={$host}", "{$username}", "{$password}");
         $pdo->exec($sql);
     }
 }
