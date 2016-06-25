@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "00d9a5b1592ceb166bdc87f8576bc1fc",
-    "content-hash": "878086508ae042485e1bf66fa4c0fba5",
+    "hash": "a02ef36c8f6f652462bfa7f2a8fb5499",
+    "content-hash": "a1db667bd7661864229ef9f7afc212a7",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -758,6 +758,50 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "sedp-mis/lib",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sedp-mis/lib.git",
+                "reference": "3051b81209cbb960f197cebf41764a035e45bc72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sedp-mis/lib/zipball/3051b81209cbb960f197cebf41764a035e45bc72",
+                "reference": "3051b81209cbb960f197cebf41764a035e45bc72",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "4.2.11",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SedpMis\\Lib\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arjon Jason Castro",
+                    "email": "ajcastro29@gmail.com"
+                }
+            ],
+            "description": "Library or collection of classes and helpers",
+            "keywords": [
+                "lib",
+                "library"
+            ],
+            "time": "2016-06-24 05:01:29"
         },
         {
             "name": "stack/builder",

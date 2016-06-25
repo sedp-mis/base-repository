@@ -20,13 +20,13 @@
     },
     "autoload": {
         "psr-4": {
-            "SedpMis\\BaseRepository\\": "src"
+            "SedpMis\\BaseRepository\\": "src/"
         }
     },
     "autoload-dev": {
-        "psr-0": {
-            "SedpMis\\TestClasses": "test_classes"
-        }
+        "classmap": [
+            "test_classes/"
+        ]
     },
     "minimum-stability": "stable"
 }
