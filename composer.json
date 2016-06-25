@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "laravel/framework": "4.2.11"
+        "laravel/framework": "4.2.11",
+        "sedp-mis/lib": "~1.0"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",
@@ -20,6 +21,11 @@
     "autoload": {
         "psr-4": {
             "SedpMis\\BaseRepository\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "SedpMis\\TestClasses": "test_classes"
         }
     },
     "minimum-stability": "stable"
