@@ -1,3 +1,5 @@
-### Base Repository
+# Base Repository for Laravel 4.2 Models
 
-Abstraction for model repository
+[![Build Status](https://travis-ci.org/sedp-mis/base-repository.svg?branch=master)](https://travis-ci.org/sedp-mis/base-repository)
+
+Abstraction for model repository.
