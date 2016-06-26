@@ -26,7 +26,7 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->repo = new SpyRepositoryEloquent(new Spy);
     }
 
-    public function testShouldCreateStoreAndFindModel()
+    public function testShouldCreateStoreFindAndUpdateModel()
     {
         $spy = $this->repo->create([
             'name' => 'arjon',
@@ -38,5 +38,12 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertTrue($spy instanceof Spy);
         $this->assertTrue($storedSpy instanceof Spy);
         $this->assertEquals($storedSpy->getAttributes(), $spy->getAttributes());
+
+        $storedSpy->name = 'ajcastro';
+
+        $this->repo->update(['name' => $storedSpy->name], $storedSpy->id);
+
+        $updatedSpy = $this->repo->find($storedSpy->id);
+        $this->assertEquals($updatedSpy->getAttributes(), $storedSpy->getAttributes());
     }
 }
