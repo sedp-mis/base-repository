@@ -2,6 +2,8 @@
 
 namespace SedpMis\BaseRepository;
 
+use Illuminate\Support\Facades\App;
+
 abstract class RepositoryWrapper 
 {
     protected $repositories;
@@ -49,7 +51,7 @@ abstract class RepositoryWrapper
      */
     public static function shared()
     {
-        return static::$instance ?: static::$instance = \App::make(get_called_class());
+        return static::$instance ?: static::$instance = App::make(get_called_class());
     }
 
     /**
@@ -59,7 +61,7 @@ abstract class RepositoryWrapper
      */
     public static function make()
     {
-        return \App::make(get_called_class());
+        return App::make(get_called_class());
     }
 
     public static function __callStatic($repository, $args)
