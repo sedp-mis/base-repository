@@ -468,4 +468,23 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
 
         return $this;
     }
+
+
+
+    // New methods
+
+    /**
+     * Fetching data from Eloquent with pagination, filtering, sorting and limit/offset
+     *
+     * @param array $attributes
+     * @param array $fiters
+     * @param array $sort
+     * @param int|null $limit
+     * @param int|0 $skip
+     * @return array
+     */
+    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
+    {
+        return $this->eagerLoadRelations()->get($attributes);
+    }
 }
