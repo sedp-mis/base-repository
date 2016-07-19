@@ -31,4 +31,7 @@ interface RepositoryInterface
     public function delete($model);
 
     public function has($relation, $operator = '>=', $count = 1);
+
+    // New Methods
+    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0);
 }
