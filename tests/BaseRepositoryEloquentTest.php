@@ -51,7 +51,7 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals($updatedSpy->getAttributes(), $storedSpy->getAttributes());
     }
 
-    public function testShouldFetchWithGivenAttributes()
+    public function seed()
     {
         $spies = [
             [
@@ -133,12 +133,31 @@ class BaseRepositoryEloquentTest extends TestCase
                 'xp' => 162
             ]
         ];
+        foreach ($spies as $spy) {
+            $this->repo->create($spy);
+        }
+    }
+
+    public function testShouldFetchWithGivenAttributes()
+    {
+        $this->seed();
 
         $attributes = [
             'username',
             'name'
         ];
 
+        $fetchSpies = $this->repo->fetch($attributes);
+
+        $this->assertTrue(count($fetchSpies) > 0, 'No fetched record of spies.');
+
+        foreach ($fetchSpies as $fetchSpy) {
+            $this->assertEquals(array_keys($fetchSpy->getAttributes()), $attributes);
+        }
+    }
+
+    public function xtestShouldFetchWithAppliedFilters()
+    {
         $filters = [
             'id' => [
                 '=' => [1, 2, 3],
@@ -146,18 +165,5 @@ class BaseRepositoryEloquentTest extends TestCase
                 '!=' => [1, 2, 3, 4, 5, 6, 8, 10, 12, 13]
             ]
         ];
-
-        foreach ($spies as $spy)
-        {
-            $resultSpy = $this->repo->create($spy);
-        }
-
-        $fetchSpies = $this->repo->fetch($attributes, $filters, null, null, 0);
-
-        // foreach ($fetchSpies as $fetchSpy) {
-        //     $this->assertEquals(array_keys($fetchSpy->getAttributes()), $attributes);
-        // }
-        dd($fetchSpies);
-        
     }
 }
