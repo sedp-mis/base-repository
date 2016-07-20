@@ -58,79 +58,79 @@ class BaseRepositoryEloquentTest extends TestCase
                 'username' => 'markii1607',
                 'password' => 'secret',
                 'name' => 'mark',
-                'xp' => 99
+                'xp' => 172
             ],
             [
                 'username' => 'katbritanico',
                 'password' => 'secret',
                 'name' => 'katrina',
-                'xp' => 99
+                'xp' => 57
             ],
             [
                 'username' => 'janelagatuz',
                 'password' => 'secret',
                 'name' => 'janelle',
-                'xp' => 99
+                'xp' => 352
             ],
             [
                 'username' => 'jkmendez',
                 'password' => 'secret',
                 'name' => 'ken',
-                'xp' => 99
+                'xp' => 100
             ],
             [
                 'username' => 'guyabani',
                 'password' => 'secret',
                 'name' => 'giovani',
-                'xp' => 99
+                'xp' => 67
             ],
             [
                 'username' => 'ja9',
                 'password' => 'secret',
                 'name' => 'janine',
-                'xp' => 99
+                'xp' => 10
             ],
             [
                 'username' => 'aceruser22',
                 'password' => 'secret',
                 'name' => 'ace',
-                'xp' => 99
+                'xp' => 52
             ],
             [
                 'username' => 'jmoane',
                 'password' => 'secret',
                 'name' => 'jessa',
-                'xp' => 99
+                'xp' => 281
             ],
             [
                 'username' => 'cklucido',
                 'password' => 'secret',
                 'name' => 'kaye',
-                'xp' => 99
+                'xp' => 72
             ],
             [
                 'username' => 'jpintor',
                 'password' => 'secret',
                 'name' => 'jazarr',
-                'xp' => 99
+                'xp' => 562
             ],
             [
                 'username' => 'kbagasbas',
                 'password' => 'secret',
                 'name' => 'karen',
-                'xp' => 99
+                'xp' => 527
             ],
             [
                 'username' => 'tinejoy',
                 'password' => 'secret',
                 'name' => 'tine',
-                'xp' => 99
+                'xp' => 732
             ],
             [
                 'username' => 'rodabby',
                 'password' => 'secret',
                 'name' => 'abby',
-                'xp' => 99
+                'xp' => 162
             ]
         ];
 
@@ -139,16 +139,25 @@ class BaseRepositoryEloquentTest extends TestCase
             'name'
         ];
 
+        $filters = [
+            'id' => [
+                '=' => [1, 2, 3],
+                '>' => [12],
+                '!=' => [1, 2, 3, 4, 5, 6, 8, 10, 12, 13]
+            ]
+        ];
+
         foreach ($spies as $spy)
         {
             $resultSpy = $this->repo->create($spy);
         }
 
-        $fetchSpies = $this->repo->fetch($attributes, [], [], null, 0);
+        $fetchSpies = $this->repo->fetch($attributes, $filters, null, null, 0);
 
-        foreach ($fetchSpies as $fetchSpy) {
-            $this->assertEquals(array_keys($fetchSpy->getAttributes()), $attributes);
-        }
-        // dd($this->repo->fetch()->toArray());
+        // foreach ($fetchSpies as $fetchSpy) {
+        //     $this->assertEquals(array_keys($fetchSpy->getAttributes()), $attributes);
+        // }
+        dd($fetchSpies);
+        
     }
 }
