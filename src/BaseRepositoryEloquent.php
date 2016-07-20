@@ -485,6 +485,18 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
     {
-        return $this->eagerLoadRelations()->get($attributes);
+        // return $this->eagerLoadRelations()->get($attributes);
+        $orWhereVars=[];
+        if(!empty($filters)){
+            foreach($filters as $k=>$filter){
+                foreach ($filter as $key => $filtered) {
+                    foreach ($filtered as $keys) {
+                        array_push($orWhereVars, "orWhere('$k', '$key', $keys)");
+                    }
+                }
+            }
+        }
+        $samp=implode("->", $orWhereVars);
+        return $this->eagerLoadRelations()->$samp->get($attributes);
     }
 }
