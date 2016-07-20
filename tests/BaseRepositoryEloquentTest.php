@@ -94,14 +94,22 @@ class BaseRepositoryEloquentTest extends TestCase
         }
     }
 
-    public function xtestShouldFetchWithAppliedFilters()
+    public function testShouldFetchWithAppliedFilters()
     {
-        $filters = [
-            'id' => [
-                '=' => [1, 2, 3],
-                '>' => [12],
-                '!=' => [1, 2, 3, 4, 5, 6, 8, 10, 12, 13]
-            ]
-        ];
+        // $filters = [
+        //     'xp' => [
+        //         '=' => [352],
+        //         '>' => [12],
+        //         '!=' => [1, 2, 3, 4, 5, 6, 8, 10, 12, 13]
+        //     ]
+        // ];
+        
+        $this->seed();
+
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '=' => [352]
+        ]]);
+
+        $this->assertEquals(1, $spies->count());
     }
 }
