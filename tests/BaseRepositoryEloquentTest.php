@@ -106,10 +106,34 @@ class BaseRepositoryEloquentTest extends TestCase
         
         $this->seed();
 
+        // Test `=`
         $spies = $this->repo->fetch(null, ['xp' => [
             '=' => [352]
         ]]);
 
         $this->assertEquals(1, $spies->count());
+
+        // Test `!=`
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '!=' => [352]
+        ]]);
+
+        $this->assertEquals(2, $spies->count());
+
+        // Test `>`
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '>' => [100]
+        ]]);
+
+        $this->assertEquals(2, $spies->count());
+
+        // Test `<`
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '<' => [100]
+        ]]);
+
+        $this->assertEquals(1, $spies->count());
+
+        // TODO: Create test for >= and <=
     }
 }
