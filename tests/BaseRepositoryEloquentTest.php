@@ -94,25 +94,39 @@ class BaseRepositoryEloquentTest extends TestCase
         }
     }
 
-    public function testShouldFetchWithAppliedFilters()
+    public function testFetchFiltersUsingEquals()
     {
-        // $filters = [
-        //     'xp' => [
-        //         '=' => [352],
-        //         '>' => [12],
-        //         '!=' => [1, 2, 3, 4, 5, 6, 8, 10, 12, 13]
-        //     ]
-        // ];
-        
         $this->seed();
 
-        // Test `=`
+        // Test `=` with single value
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '=' => 352
+        ]]);
+
+        $this->assertEquals(1, $spies->count());
+
+        // Test `=` with array of values
         $spies = $this->repo->fetch(null, ['xp' => [
             '=' => [352]
         ]]);
 
         $this->assertEquals(1, $spies->count());
 
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '=' => [352, 57]
+        ]]);
+
+        $this->assertEquals(2, $spies->count());
+
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '=' => [352, 57, 172]
+        ]]);
+
+        $this->assertEquals(3, $spies->count());
+    }
+
+    public function moreTestLater()
+    {
         // Test `!=`
         $spies = $this->repo->fetch(null, ['xp' => [
             '!=' => [352]
