@@ -59,79 +59,17 @@ class BaseRepositoryEloquentTest extends TestCase
                 'password' => 'secret',
                 'name' => 'mark',
                 'xp' => 172
-            ],
-            [
+            ], [
                 'username' => 'katbritanico',
                 'password' => 'secret',
                 'name' => 'katrina',
                 'xp' => 57
-            ],
-            [
+            ], [
                 'username' => 'janelagatuz',
                 'password' => 'secret',
                 'name' => 'janelle',
                 'xp' => 352
             ],
-            [
-                'username' => 'jkmendez',
-                'password' => 'secret',
-                'name' => 'ken',
-                'xp' => 100
-            ],
-            [
-                'username' => 'guyabani',
-                'password' => 'secret',
-                'name' => 'giovani',
-                'xp' => 67
-            ],
-            [
-                'username' => 'ja9',
-                'password' => 'secret',
-                'name' => 'janine',
-                'xp' => 10
-            ],
-            [
-                'username' => 'aceruser22',
-                'password' => 'secret',
-                'name' => 'ace',
-                'xp' => 52
-            ],
-            [
-                'username' => 'jmoane',
-                'password' => 'secret',
-                'name' => 'jessa',
-                'xp' => 281
-            ],
-            [
-                'username' => 'cklucido',
-                'password' => 'secret',
-                'name' => 'kaye',
-                'xp' => 72
-            ],
-            [
-                'username' => 'jpintor',
-                'password' => 'secret',
-                'name' => 'jazarr',
-                'xp' => 562
-            ],
-            [
-                'username' => 'kbagasbas',
-                'password' => 'secret',
-                'name' => 'karen',
-                'xp' => 527
-            ],
-            [
-                'username' => 'tinejoy',
-                'password' => 'secret',
-                'name' => 'tine',
-                'xp' => 732
-            ],
-            [
-                'username' => 'rodabby',
-                'password' => 'secret',
-                'name' => 'abby',
-                'xp' => 162
-            ]
         ];
         foreach ($spies as $spy) {
             $this->repo->create($spy);
