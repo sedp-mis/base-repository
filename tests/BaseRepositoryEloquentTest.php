@@ -82,7 +82,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
         $attributes = [
             'username',
-            'name'
+            'xp'
         ];
 
         $fetchSpies = $this->repo->fetch($attributes);
@@ -125,8 +125,10 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals(3, $spies->count());
     }
 
-    public function moreTestLater()
+    public function testFetchFilterUsingOtherOperators()
     {
+        $this->seed();
+
         // Test `!=`
         $spies = $this->repo->fetch(null, ['xp' => [
             '!=' => [352]
@@ -148,6 +150,37 @@ class BaseRepositoryEloquentTest extends TestCase
 
         $this->assertEquals(1, $spies->count());
 
-        // TODO: Create test for >= and <=
+        // Test for `>=` and `<=`
+        $spies = $this->repo->fetch(null, ['xp'=> [
+            '>=' => [180]
+        ]]);
+
+        $this->assertEquals(1, $spies->count());
+
+        $spies = $this->repo->fetch(null, ['xp'=> [
+            '<=' => [172]
+        ]]);
+
+        $this->assertEquals(2, $spies->count());
+    }
+
+    public function testFetchSortWithTheGivenAttributes(){
+        $this->seed();
+
+        // Test for name in ascending order
+        $spies=$this->repo->fetch(null, null, [
+            'name' => 'asc'
+        ]);
+
+        $this->assertEquals($spies->first()->name, "janelle");
+        $this->assertEquals($spies->last()->name, "mark");
+
+        // Test for xp in descending order
+        $spies=$this->repo->fetch(null, null, [
+            'xp' => 'desc'
+        ]);
+
+        $this->assertEquals($spies->first()->xp, 352);
+        $this->assertEquals($spies->last()->xp, 57);
     }
 }
