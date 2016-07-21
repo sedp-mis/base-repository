@@ -485,21 +485,108 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
     {
-        $attributes = $attributes ?: ['*'];
-        
-        return $this->eagerLoadRelations()->get($attributes);
+        if(!empty($attributes)){
+            if(!empty($sort)){
+                $keySort=key($sort);
+                $valueSort=$sort[$keySort];
+                if(!empty($filters)){
+                    // getting the column name
+                    $key=key($filters);
+                    
+                    //getting the operator
+                    $operator=key($filters[$key]);
 
-        $orWhereVars=[];
-        if(!empty($filters)){
-            foreach($filters as $k=>$filter){
-                foreach ($filter as $key => $filtered) {
-                    foreach ($filtered as $keys) {
-                        array_push($orWhereVars, "orWhere('$k', '$key', $keys)");
+                    //getting the values
+                    $value=$filters[$key][$operator];
+                    $value = is_array($value) ? $value : [$value];
+
+                    //checking the operator
+                    if(strcmp($operator, "=")==0){
+                        return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->get($attributes);
+                    }else if(strcmp($operator, "!=")==0){
+                        return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->get($attributes);
+                    }else{
+                        return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->get($attributes);
                     }
+                }else{
+                    return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->get($attributes);
+                }
+            }else{
+                if(!empty($filters)){
+                    // getting the column name
+                    $key=key($filters);
+                    
+                    //getting the operator
+                    $operator=key($filters[$key]);
+
+                    //getting the values
+                    $value=$filters[$key][$operator];
+                    $value = is_array($value) ? $value : [$value];
+
+                    //checking the operator
+                    if(strcmp($operator, "=")==0){
+                        return $this->eagerLoadRelations()->whereIn($key, $value)->get($attributes);
+                    }else if(strcmp($operator, "!=")==0){
+                        return $this->eagerLoadRelations()->whereNotIn($key, $value)->get($attributes);
+                    }else{
+                        return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->get($attributes);
+                    }
+                }else{
+                    return $this->eagerLoadRelations()->get($attributes);
+                }
+            }
+        }else{
+            if(!empty($sort)){
+                $keySort=key($sort);
+                $valueSort=$sort[$keySort];
+                if(!empty($filters)){
+
+                    //getting the column name
+                    $key=key($filters);
+
+                    //getting the operator
+                    $operator=key($filters[$key]);
+
+                    //getting the values
+                    $value=$filters[$key][$operator];
+                    $value = is_array($value) ? $value : [$value];
+
+                    //checking the operator
+                    if(strcmp($operator, "=")==0){
+                        return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->get();
+                    }else if(strcmp($operator, "!=")==0){
+                        return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->get();
+                    }else{
+                        return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->get();
+                    }
+                }else{
+                    return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->get();
+                }
+            }else{
+                if(!empty($filters)){
+
+                    //getting the column name
+                    $key=key($filters);
+
+                    //getting the operator
+                    $operator=key($filters[$key]);
+
+                    //getting the values
+                    $value=$filters[$key][$operator];
+                    $value = is_array($value) ? $value : [$value];
+
+                    //checking the operator
+                    if(strcmp($operator, "=")==0){
+                        return $this->eagerLoadRelations()->whereIn($key, $value)->get();
+                    }else if(strcmp($operator, "!=")==0){
+                        return $this->eagerLoadRelations()->whereNotIn($key, $value)->get();
+                    }else{
+                        return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->get();
+                    }
+                }else{
+                    $this->eagerLoadRelations()->get();
                 }
             }
         }
-        $samp=implode("->", $orWhereVars);
-        return $this->eagerLoadRelations()->$samp->get($attributes);
     }
 }
