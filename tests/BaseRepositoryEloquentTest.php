@@ -185,19 +185,30 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals($spies->last()->xp, 57);
     }
 
-    public function testFetchLimit()
+    public function testFetchLimitAndSkip()
     {
         $this->seed();
 
         // Test with limit of 2
         $spies=$this->repo->fetch(null, null, null, 2);
 
-        $this->assertTrue(count($spies)==2, count($spies));
+        $this->assertTrue(count($spies)==2, "Spies collected: "+count($spies));
 
         // Test with limit 1
         $spies=$this->repo->fetch(null, null, null, 1);
 
-        $this->assertTrue(count($spies)==1, "No spies found");
+        $this->assertTrue(count($spies)==1, "Spies collected: "+count($spies));
 
+        // Test with limit 2 offset 1
+        $spies=$this->repo->fetch(null, null, null, 2, 1);
+
+        $this->assertTrue(count($spies)==2, "Spies collected: "+count($spies));
+        $this->assertEquals($spies->first()->id, 2);
+
+        // Test with limit 1 offset 2
+        $spies=$this->repo->fetch(null, null, null, 1, 2);
+
+        $this->assertTrue(count($spies)==1, "Spies collected: "+count($spies));
+        $this->assertEquals($spies->first()->id, 3);
     }
 }
