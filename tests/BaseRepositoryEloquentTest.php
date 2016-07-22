@@ -211,4 +211,37 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertTrue(count($spies)==1, "Spies collected: "+count($spies));
         $this->assertEquals($spies->first()->id, 3);
     }
+
+    public function testFetchForAllParameters()
+    {
+        $this->seed();
+
+        $attributes = [
+            'username',
+            'name'
+        ];
+
+        $filters = [
+            'xp' => [
+                '=' => [
+                    352, 
+                    57
+                ]
+            ]
+        ];
+
+        $sort = [
+            'name' => 'desc'
+        ];
+
+        $spies=$this->repo->fetch($attributes, $filters, $sort, 1, 1);
+
+        $this->assertTrue(count($spies) == 1, "Spies Count: "+count($spies));
+
+        foreach ($spies as $spy) {
+            $this->assertEquals(array_keys($spy->getAttributes()), $attributes);
+        }
+
+        $this->assertEquals($spies->first()->name, "janelle");
+    }
 }
