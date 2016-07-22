@@ -486,300 +486,300 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
     {
         //for improvement
-        if(!empty($attributes)){
-            if(!empty($sort)){
-                $keySort=key($sort);
-                $valueSort=$sort[$keySort];
-                if(!empty($limit) && $skip != 0){
-                    if(!empty($filters)){
+        if (! empty($attributes)) {
+            if (! empty($sort)) {
+                $keySort = key($sort);
+                $valueSort = $sort[$keySort];
+                if (! empty($limit) && $skip != 0) {
+                    if (! empty($filters)) {
                         // getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
                         
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
                     }
-                }else if(!empty($limit) && $skip == 0){
-                    if(!empty($filters)){
+                } else if (! empty($limit) && $skip == 0) {
+                    if (! empty($filters)) {
                         // getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
                         
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
                     }
-                }else if(empty($limit)){
-                    if(!empty($filters)){
+                } else if (empty($limit)) {
+                    if (! empty($filters)) {
                         // getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
                         
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->get($attributes);
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->get($attributes);
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->get($attributes);
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->get($attributes);
                     }
                 }
-            }else{
-                if(!empty($limit) && $skip != 0){
-                    if(!empty($filters)){
+            } else {
+                if (! empty($limit) && $skip != 0) {
+                    if (! empty($filters)) {
                         // getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
                         
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->skip($skip)->get($attributes);
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->skip($skip)->get($attributes);
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->skip($skip)->get($attributes);
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->take($limit)->skip($skip)->get($attributes);
                     }
-                }else if(!empty($limit) && $skip ==0){
-                    if(!empty($filters)){
+                } else if (! empty($limit) && $skip == 0) {
+                    if (! empty($filters)) {
                         // getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
                         
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->get($attributes);
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->get($attributes);
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->get($attributes);
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->take($limit)->get($attributes);
                     }
-                }else if(empty($limit)){
-                    if(!empty($filters)){
+                } else if (empty($limit)) {
+                    if (! empty($filters)) {
                         // getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
                         
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->get($attributes);
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->get($attributes);
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->get($attributes);
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->get($attributes);
                     }
                 }
             }
-        }else{
-            if(!empty($sort)){
-                $keySort=key($sort);
-                $valueSort=$sort[$keySort];
-                if(!empty($limit) && $skip != 0){
-                    if(!empty($filters)){
+        } else {
+            if (! empty($sort)) {
+                $keySort = key($sort);
+                $valueSort = $sort[$keySort];
+                if (! empty($limit) && $skip != 0) {
+                    if (! empty($filters)) {
 
                         //getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
 
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
                     }
-                }else if(!empty($limit) && $skip == 0){
-                    if(!empty($filters)){
+                } else if (! empty($limit) && $skip == 0) {
+                    if (! empty($filters)) {
 
                         //getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
 
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get();
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get();
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->get();
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->get();
                     }
-                }else if(empty($limit)){
-                    if(!empty($filters)){
+                } else if (empty($limit)) {
+                    if (! empty($filters)) {
 
                         //getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
 
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->get();
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->get();
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->get();
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->get();
                     }
                 }
-            }else{
-                if(!empty($limit) && $skip != 0){
-                    if(!empty($filters)){
+            } else {
+                if (! empty($limit) && $skip != 0) {
+                    if (! empty($filters)) {
 
                         //getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
 
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->skip($skip)->get();
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->skip($skip)->get();
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->skip($skip)->get();
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->take($limit)->skip($skip)->get();
                     }
-                }else if(!empty($limit) && $skip == 0){
-                    if(!empty($filters)){
+                } else if (! empty($limit) && $skip == 0) {
+                    if (! empty($filters)) {
 
                         //getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
 
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->get();
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->get();
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->get();
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->take($limit)->get();
                     }
-                }else if(empty($limit)){
-                    if(!empty($filters)){
+                } else if (empty($limit)) {
+                    if (! empty($filters)) {
 
                         //getting the column name
-                        $key=key($filters);
+                        $key = key($filters);
 
                         //getting the operator
-                        $operator=key($filters[$key]);
+                        $operator = key($filters[$key]);
 
                         //getting the values
-                        $value=$filters[$key][$operator];
+                        $value = $filters[$key][$operator];
                         $value = is_array($value) ? $value : [$value];
 
                         //checking the operator
-                        if(strcmp($operator, "=")==0){
+                        if (strcmp($operator, "=") == 0) {
                             return $this->eagerLoadRelations()->whereIn($key, $value)->get();
-                        }else if(strcmp($operator, "!=")==0){
+                        } else if (strcmp($operator, "!=") == 0) {
                             return $this->eagerLoadRelations()->whereNotIn($key, $value)->get();
-                        }else{
+                        } else {
                             return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->get();
                         }
-                    }else{
+                    } else {
                         return $this->eagerLoadRelations()->get();
                     }
                 }
