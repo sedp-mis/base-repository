@@ -164,7 +164,8 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals(2, $spies->count());
     }
 
-    public function testFetchSortWithTheGivenAttributes(){
+    public function testFetchSortAscAndDesc()
+    {
         $this->seed();
 
         // Test for name in ascending order
@@ -182,5 +183,21 @@ class BaseRepositoryEloquentTest extends TestCase
 
         $this->assertEquals($spies->first()->xp, 352);
         $this->assertEquals($spies->last()->xp, 57);
+    }
+
+    public function testFetchLimit()
+    {
+        $this->seed();
+
+        // Test with limit of 2
+        $spies=$this->repo->fetch(null, null, null, 2);
+
+        $this->assertTrue(count($spies)==2, count($spies));
+
+        // Test with limit 1
+        $spies=$this->repo->fetch(null, null, null, 1);
+
+        $this->assertTrue(count($spies)==1, "No spies found");
+
     }
 }
