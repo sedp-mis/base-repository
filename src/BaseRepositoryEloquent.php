@@ -485,6 +485,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
     {
+        // a=attributes, s=sort, f=filters, l=limit
         $a = empty($attributes);
         $s = empty($sort);
         $l = empty($limit);
