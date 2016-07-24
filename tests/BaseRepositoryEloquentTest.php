@@ -244,4 +244,32 @@ class BaseRepositoryEloquentTest extends TestCase
 
         $this->assertEquals($spies->first()->name, "janelle");
     }
+
+    public function testPagination()
+    {
+        $this->seed();
+
+        $attributes = [
+            'username',
+            'name'
+        ];
+
+        $filters = [
+            'xp' => [
+                '=' => [
+                    352, 
+                    57
+                ]
+            ]
+        ];
+
+        $sort = [
+            'name' => 'desc'
+        ];
+
+        $spies = $this->repo->paginate($attributes, $filters, $sort, 2, 1);
+
+        $this->assertTrue(count($spies) == 2, "Spies collected: "+count($spies));
+        $this->assertEquals($spies[0]->getAttributes()['name'], "katrina");
+    }
 }
