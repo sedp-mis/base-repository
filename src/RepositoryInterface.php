@@ -34,4 +34,6 @@ interface RepositoryInterface
 
     // New Methods
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0);
+
+    public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1);
 }
