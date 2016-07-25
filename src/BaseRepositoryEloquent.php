@@ -669,4 +669,31 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
             return $fetchReturn;
         }
     }
+
+    /**
+    * Return a collection of models base from search comparison.
+    *
+    * @param string $comparison
+    * @param array $attributes
+    * @param array $fiters
+    * @param array $sort
+    * @param int|null $perPage
+    * @param int|1 $page
+    * @return array
+     */
+    public function search($comparison, $attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
+    {  
+        $fetchResult = $this->fetch($attributes, $filters, $sort, $limit, $skip);
+        $searchReturn = null;
+        if (! empty($comparison)) {
+            foreach ($fetchResult as $result) {
+               $found = array_search($comparison, $result->toArray());
+               if ($found) {
+                    $searchReturn = $found;
+                    break;
+               }
+            }
+            return $searchReturn;
+        }
+    }
 }
