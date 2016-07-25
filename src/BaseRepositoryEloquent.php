@@ -696,4 +696,29 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
             return $searchReturn;
         }
     }
+
+    /**
+    * Return a collection of models base from search comparison using paginate approach.
+    *
+    * @param string $comparison
+    * @param array $attributes
+    * @param array $fiters
+    * @param array $sort
+    * @param int|null $perPage
+    * @param int|1 $page
+    * @return array
+    */
+    public function searchPaginate($comparison, $attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
+    {
+        $fetchResult = $this->paginate($attributes, $filters, $sort, $perPage, $page);
+        $searchPaginateReturn = null;
+        foreach ($fetchResult as $result) {
+            $found = array_search($comparison, $result->toArray());
+            if ($found) {
+                $searchPaginateReturn = $found;
+                break;
+            }
+        }
+        return $searchPaginateReturn;
+    }
 }
