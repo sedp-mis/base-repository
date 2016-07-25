@@ -407,4 +407,54 @@ class BaseRepositoryEloquentTest extends TestCase
 
         $this->assertEquals($spies, null);
     }
+
+    public function testSearchComparisonWithPagination()
+    {
+        $this->seed();
+        $this->seedMoreForPaginate();
+
+        $attributes = [
+            'username',
+            'name'
+        ];
+
+        $filters = [
+            'xp' => [
+                '=' => [
+                    352, 
+                    57,
+                    86,
+                    145,
+                    41,
+                    321,
+                    512,
+                    91
+                ]
+            ]
+        ];
+
+        $sort = [
+            'name' => 'desc'
+        ];
+
+        // test value for an existing data on page 1 with 3 data per page
+        $spies = $this->repo->searchPaginate("tine", $attributes, $filters, $sort, 3, 1);
+        
+        $this->assertEquals($spies, "name");
+
+        // test value for a non-existing data on page 1 with 3 data per page
+        $spies = $this->repo->searchPaginate("katrina", $attributes, $filters, $sort, 3, 1);
+        
+        $this->assertEquals($spies, null);
+
+        // test value for an existing data on page 2 with 2 data per page
+        $spies = $this->repo->searchPaginate("cklucido", $attributes, $filters, $sort, 2, 2);
+        
+        $this->assertEquals($spies, "username");
+
+        // test value for a non-existing data on page 2 with 2 data per page
+        $spies = $this->repo->searchPaginate("kharen", $attributes, $filters, $sort, 2, 2);
+        
+        $this->assertEquals($spies, null);
+    }
 }
