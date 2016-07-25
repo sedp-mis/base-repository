@@ -357,4 +357,54 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals($spies[0]->getAttributes()['name'], "kaye");
         $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "katrina");
     }
+
+    public function testSearchComparison()
+    {
+        $this->seed();
+        $this->seedMoreForPaginate();
+
+        $attributes = [
+            'username',
+            'name'
+        ];
+
+        $filters = [
+            'xp' => [
+                '=' => [
+                    352, 
+                    57,
+                    86,
+                    145,
+                    41,
+                    321,
+                    512,
+                    91
+                ]
+            ]
+        ];
+
+        $sort = [
+            'name' => 'desc'
+        ];
+
+        // test the value for an existing data in column "name"
+        $spies = $this->repo->search("ken", $attributes, $filters, $sort);
+
+        $this->assertEquals($spies, "name");
+
+        // test the value for a non-existing data in column "name"
+        $spies = $this->repo->search("mark", $attributes, $filters, $sort);
+
+        $this->assertEquals($spies, null);
+
+        // test the value for an existing data in column "username"
+        $spies = $this->repo->search("jmoane", $attributes, $filters, $sort);
+
+        $this->assertEquals($spies, "username");
+
+        // test the value for a non-existing data in column "username"
+        $spies = $this->repo->search("joypintor", $attributes, $filters, $sort);
+
+        $this->assertEquals($spies, null);
+    }
 }
