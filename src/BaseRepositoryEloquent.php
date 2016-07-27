@@ -537,21 +537,6 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
     {
         return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
-        // $fetchReturn = $this->fetch($attributes, $filters, $sort);
-        // $index = 0;
-        // $pageFetch = [];
-
-        // if ((! empty($perPage)) && ($page >= 1)) {
-        //     $offset = ($page - 1) * $perPage;
-
-        //     for ($index = $offset; $index < ($perPage * $page) && $index < count($fetchReturn); $index++) {
-        //         array_push($pageFetch, $fetchReturn[$index]);
-        //     }
-
-        //     return $pageFetch;
-        // } else {
-        //     return $fetchReturn;
-        // }
     }
 
     /**
