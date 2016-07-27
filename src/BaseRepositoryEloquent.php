@@ -485,160 +485,43 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
     {
-        // a=attributes, s=sort, f=filters, l=limit
-        $a = empty($attributes);
-        $s = empty($sort);
-        $l = empty($limit);
-        $f = empty($filters);
+        $query = $this->model->query();
+        
+        //filters
+        if (! empty($filters)) {
+            foreach ($filters as $key => $filter) {
+                foreach ($filter as $operator => $values) {
+                    $values = is_array($values) ? $values : [$values];
 
-        if(! $s){
-            $keySort = key($sort);
-            $valueSort = $sort[$keySort];
+                    if ($operator == "=") {
+                        $query->whereIn($key, $values);
+                    } else if ($operator == "!=") {
+                        $query->whereNotIn($key, $values);
+                    } else {
+                        $query->where($key, $operator, is_array($values) ? head($values) : $values);
+                    }
+                }
+            }
         }
 
-        if(! $f){
-            // getting the column name
-            $key = key($filters);
-            //getting the operator
-            $operator = key($filters[$key]);
-            //getting the values
-            $value = $filters[$key][$operator];
-            $value = is_array($value) ? $value : [$value];
+        //sort
+        if (! empty($sort)) {
+            //assumes that the aray contains only one ordering column, else get the first line of values
+            //single column sorting
+            $col = key($sort);
+            $valueCol = $sort[$col];
+
+            $query->orderBy($col, $valueCol);
         }
 
-        if ((! $a) && (! $s) && (! $l) && ($skip != 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
-            }
-        } else if ((! $a) && (! $s) && (! $l) && ($skip != 0) && ($f)) {
-            return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get($attributes);
-        } else if ((! $a) && (! $s) && (! $l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
-            }
-        } else if ((! $a) && (! $s) && (! $l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->take($limit)->get($attributes);
-        } else if ((! $a) && (! $s) && ($l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->get($attributes);
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->get($attributes);
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->get($attributes);
-            }
-        } else if ((! $a) && (! $s) && ($l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->get($attributes);
-        } else if ((! $a) && ($s) && (! $l) && ($skip != 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->skip($skip)->get($attributes);
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->skip($skip)->get($attributes);
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->skip($skip)->get($attributes);
-            }
-        } else if ((! $a) && ($s) && (! $l) && ($skip != 0) && ($f)) {
-            return $this->eagerLoadRelations()->take($limit)->skip($skip)->get($attributes);
-        } else if ((! $a) && ($s) && (! $l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->get($attributes);
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->get($attributes);
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->get($attributes);
-            }
-        } else if ((! $a) && ($s) && (! $l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->take($limit)->get($attributes);
-        } else if ((! $a) && ($s) && ($l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->get($attributes);
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->get($attributes);
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->get($attributes);
-            }
-        } else if ((! $a) && ($s) && ($l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->get($attributes);
-        } else if (($a) && (! $s) && (! $l) && ($skip != 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
-            }
-        } else if (($a) && (! $s) && (! $l) && ($skip != 0) && ($f)) {
-            return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->take($limit)->skip($skip)->get();
-        } else if (($a) && (! $s) && (! $l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get();
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->take($limit)->get();
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->take($limit)->get();
-            }
-        } else if (($a) && (! $s) && (! $l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->take($limit)->get();
-        } else if (($a) && (! $s) && ($l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->orderBy($keySort, $valueSort)->get();
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->orderBy($keySort, $valueSort)->get();
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->orderBy($keySort, $valueSort)->get();
-            }
-        } else if (($a) && (! $s) && ($l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->orderBy($keySort, $valueSort)->get();
-        } else if (($a) && ($s) && (! $l) && ($skip != 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->skip($skip)->get();
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->skip($skip)->get();
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->skip($skip)->get();
-            }
-        } else if (($a) && ($s) && (! $l) && ($skip != 0) && ($f)) {
-                return $this->eagerLoadRelations()->take($limit)->skip($skip)->get();
-        } else if (($a) && ($s) && (! $l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->take($limit)->get();
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->take($limit)->get();
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->take($limit)->get();
-            }
-        } else if (($a) && ($s) && (! $l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->take($limit)->get();
-        } else if (($a) && ($s) && ($l) && ($skip == 0) && (! $f)) {
-            //checking the operator
-            if (strcmp($operator, "=") == 0) {
-                return $this->eagerLoadRelations()->whereIn($key, $value)->get();
-            } else if (strcmp($operator, "!=") == 0) {
-                return $this->eagerLoadRelations()->whereNotIn($key, $value)->get();
-            } else {
-                return $this->eagerLoadRelations()->orWhere($key, $operator, $value)->get();
-            }
-        } else if (($a) && ($s) && ($l) && ($skip == 0) && ($f)) {
-            return $this->eagerLoadRelations()->get();
+        //limit and skip
+        if(! empty($limit)){
+            $query->take($limit)->skip($skip);
         }
+
+        //attributes
+        $attributes = empty($attributes) ? $attributes = ['*'] : $attributes;
+        return $query->get($attributes);
     }
 
     /**
@@ -653,21 +536,22 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     */
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
     {
-        $fetchReturn = $this->fetch($attributes, $filters, $sort);
-        $index = 0;
-        $pageFetch = [];
+        return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
+        // $fetchReturn = $this->fetch($attributes, $filters, $sort);
+        // $index = 0;
+        // $pageFetch = [];
 
-        if ((! empty($perPage)) && ($page >= 1)) {
-            $offset = ($page - 1) * $perPage;
+        // if ((! empty($perPage)) && ($page >= 1)) {
+        //     $offset = ($page - 1) * $perPage;
 
-            for ($index = $offset; $index < ($perPage * $page) && $index < count($fetchReturn); $index++) {
-                array_push($pageFetch, $fetchReturn[$index]);
-            }
+        //     for ($index = $offset; $index < ($perPage * $page) && $index < count($fetchReturn); $index++) {
+        //         array_push($pageFetch, $fetchReturn[$index]);
+        //     }
 
-            return $pageFetch;
-        } else {
-            return $fetchReturn;
-        }
+        //     return $pageFetch;
+        // } else {
+        //     return $fetchReturn;
+        // }
     }
 
     /**
