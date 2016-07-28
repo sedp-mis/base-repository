@@ -265,11 +265,11 @@ class BaseRepositoryEloquentTest extends TestCase
 
         // Test for name in ascending order
         $spies=$this->repo->fetch(null, null, [
-            'xp' => 'asc'
+            'name' => 'asc'
         ]);
 
-        $this->assertEquals($spies->first()->name, "katrina");
-        $this->assertEquals($spies->last()->name, "janelle");
+        $this->assertEquals($spies->first()->name, "janelle");
+        $this->assertEquals($spies->last()->name, "mark");
 
         // Test for xp in descending order
         $spies=$this->repo->fetch(null, null, [
