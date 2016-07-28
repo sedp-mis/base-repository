@@ -180,16 +180,40 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals(3, $spies->count());
     }
 
-    public function testFetchFilterUsingOtherOperators()
+    public function testFetchFiltersUsingNotEquals()
     {
         $this->seed();
 
-        // Test `!=`
+        // Test `!=` with single value
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '!=' => 352
+        ]]);
+
+        $this->assertEquals(2, $spies->count());
+
+        // Test `!=` with array of values
         $spies = $this->repo->fetch(null, ['xp' => [
             '!=' => [352]
         ]]);
 
         $this->assertEquals(2, $spies->count());
+
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '!=' => [352, 57]
+        ]]);
+
+        $this->assertEquals(1, $spies->count());
+
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '!=' => [352, 57, 172]
+        ]]);
+
+        $this->assertEquals(0, $spies->count());
+    }
+
+    public function testFetchFiltersUsingGreaterThan()
+    {
+        $this->seed();
 
         // Test `>`
         $spies = $this->repo->fetch(null, ['xp' => [
@@ -197,6 +221,11 @@ class BaseRepositoryEloquentTest extends TestCase
         ]]);
 
         $this->assertEquals(2, $spies->count());
+    }
+
+    public function testFetchFiltersUsingLessThan()
+    {
+        $this->seed();
 
         // Test `<`
         $spies = $this->repo->fetch(null, ['xp' => [
@@ -204,6 +233,11 @@ class BaseRepositoryEloquentTest extends TestCase
         ]]);
 
         $this->assertEquals(1, $spies->count());
+    }
+
+    public function testFetchFiltersUsingGreaterThanOrEqual()
+    {
+        $this->seed();
 
         // Test for `>=` and `<=`
         $spies = $this->repo->fetch(null, ['xp'=> [
@@ -211,6 +245,11 @@ class BaseRepositoryEloquentTest extends TestCase
         ]]);
 
         $this->assertEquals(1, $spies->count());
+    }
+
+    public function testFetchFiltersUsingLessThanOrEqual()
+    {
+        $this->seed();
 
         $spies = $this->repo->fetch(null, ['xp'=> [
             '<=' => [172]
