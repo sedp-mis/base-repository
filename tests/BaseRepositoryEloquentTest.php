@@ -372,28 +372,28 @@ class BaseRepositoryEloquentTest extends TestCase
         // page 1, 3 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 3, 1);
 
-        $this->assertTrue(count($spies) == 3, "Spies collected: "+count($spies));
+        $this->assertTrue(count($spies) == 3, "Spies collected: ".count($spies));
         $this->assertEquals($spies[0]->getAttributes()['name'], "tine");
         $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "kaye");
 
         // page 3, 3 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 3, 3);
 
-        $this->assertTrue(count($spies) == 2, "Spies collected: "+count($spies));
+        $this->assertTrue(count($spies) == 2, "Spies collected: ".count($spies));
         $this->assertEquals($spies[0]->getAttributes()['name'], "janelle");
         $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "giovani");
 
         // page 2, 4 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 4, 2);
 
-        $this->assertTrue(count($spies) == 4, "Spies collected: "+count($spies));
+        $this->assertTrue(count($spies) == 4, "Spies collected: ".count($spies));
         $this->assertEquals($spies[0]->getAttributes()['name'], "karen");
         $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "giovani");
 
         // page 2, 2 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 2, 2);
 
-        $this->assertTrue(count($spies) == 2, "Spies collected: "+count($spies));
+        $this->assertTrue(count($spies) == 2, "Spies collected: ".count($spies));
         $this->assertEquals($spies[0]->getAttributes()['name'], "kaye");
         $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "katrina");
     }
