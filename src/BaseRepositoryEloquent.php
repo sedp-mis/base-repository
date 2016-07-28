@@ -480,10 +480,10 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      * @param array $fiters
      * @param array $sort
      * @param int|null $limit
-     * @param int|0 $skip
+     * @param int|0 $offset
      * @return array
      */
-    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
+    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
     {
         $query = $this->model->query();
         
@@ -514,9 +514,9 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
             $query->orderBy($col, $valueCol);
         }
 
-        //limit and skip
+        //limit and offset
         if (!empty($limit)){
-            $query->take($limit)->skip($skip);
+            $query->take($limit)->offset($offset);
         }
 
         //attributes
@@ -550,9 +550,9 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     * @param int|1 $page
     * @return array
      */
-    public function search($comparison, $attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0)
+    public function search($comparison, $attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
     {  
-        $fetchResult = $this->fetch($attributes, $filters, $sort, $limit, $skip);
+        $fetchResult = $this->fetch($attributes, $filters, $sort, $limit, $offset);
         $searchReturn = null;
         if (!empty($comparison)) {
             foreach ($fetchResult as $result) {
