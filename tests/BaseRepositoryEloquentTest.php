@@ -239,7 +239,7 @@ class BaseRepositoryEloquentTest extends TestCase
     {
         $this->seed();
 
-        // Test for `>=` and `<=`
+        // Test `>=`
         $spies = $this->repo->fetch(null, ['xp'=> [
             '>=' => [180]
         ]]);
@@ -250,7 +250,8 @@ class BaseRepositoryEloquentTest extends TestCase
     public function testFetchFiltersUsingLessThanOrEqual()
     {
         $this->seed();
-
+        
+        // Test `<=`
         $spies = $this->repo->fetch(null, ['xp'=> [
             '<=' => [172]
         ]]);
