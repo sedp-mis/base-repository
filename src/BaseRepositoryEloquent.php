@@ -488,7 +488,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         $query = $this->model->query();
         
         //filters
-        if (! empty($filters)) {
+        if (!empty($filters)) {
             foreach ($filters as $key => $filter) {
                 foreach ($filter as $operator => $values) {
                     $values = is_array($values) ? $values : [$values];
@@ -505,7 +505,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         //sort
-        if (! empty($sort)) {
+        if (!empty($sort)) {
             //assumes that the aray contains only one ordering column, else get the first line of values
             //single column sorting
             $col = key($sort);
@@ -515,12 +515,12 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         //limit and skip
-        if(! empty($limit)){
+        if (!empty($limit)){
             $query->take($limit)->skip($skip);
         }
 
         //attributes
-        $attributes = empty($attributes) ? $attributes = ['*'] : $attributes;
+        $attributes = empty($attributes) ? ['*'] : $attributes;
         return $query->get($attributes);
     }
 
@@ -554,7 +554,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     {  
         $fetchResult = $this->fetch($attributes, $filters, $sort, $limit, $skip);
         $searchReturn = null;
-        if (! empty($comparison)) {
+        if (!empty($comparison)) {
             foreach ($fetchResult as $result) {
                $found = array_search($comparison, $result->toArray());
                if ($found) {
