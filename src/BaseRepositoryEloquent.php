@@ -498,7 +498,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
                     } else if ($operator == "!=") {
                         $query->whereNotIn($key, $values);
                     } else {
-                        $query->where($key, $operator, is_array($values) ? head($values) : $values);
+                        $query->where($key, $operator, head($values));
                     }
                 }
             }
