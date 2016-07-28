@@ -506,12 +506,10 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
 
         //sort
         if (!empty($sort)) {
-            //assumes that the aray contains only one ordering column, else get the first line of values
-            //single column sorting
-            $col = key($sort);
-            $valueCol = $sort[$col];
-
-            $query->orderBy($col, $valueCol);
+            // sort models 
+            foreach ($sort as $attribute => $order) {
+                $query->orderBy($attribute, $order);
+            }
         }
 
         //limit and offset

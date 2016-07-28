@@ -280,6 +280,42 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals($spies->last()->xp, 57);
     }
 
+    public function seedForTestingMultipleSort()
+    {
+        $spies = [
+            [
+                'id'   => 1,
+                'name' => 'anna',
+                'xp'   => 2
+            ],[
+                'id'   => 2,
+                'name' => 'anna',
+                'xp'   => 3
+            ],[
+                'id'   => 3,
+                'name' => 'anna',
+                'xp'   => 4
+            ],
+        ];
+
+        foreach ($spies as $spy) {
+            $this->repo->create($spy);
+        }
+    }
+
+    public function testFetchShouldSortUsingMultiple()
+    {
+        $this->seedForTestingMultipleSort();
+
+        $spies = $this->repo->fetch(null, null, [
+            'name' => 'asc',
+            'xp'   => 'desc'
+        ]);
+
+        $this->assertEquals($spies->first()->id, 3);
+        $this->assertEquals($spies->last()->id, 1);
+    }
+
     public function testFetchLimitAndSkip()
     {
         $this->seed();
