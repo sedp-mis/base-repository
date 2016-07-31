@@ -566,4 +566,25 @@ class BaseRepositoryEloquentTest extends TestCase
 
         $this->assertTrue($spy->getRelation("target") instanceof Target);
     }
+
+    public function testShouldEagerLoadRelationsWithAttributes()
+    {
+        $this->seedWithTarget();
+
+        $relations = [
+            'target' => [
+                'attributes' => [
+                    'id',
+                    'name'
+                ]
+            ]
+        ];
+
+        $spy = $this->repo->with('target')->first();
+
+        dd($spy->toArray());
+    }
+
+    // URL
+    // http://localhost:8000/api/v1/posts?relations[]=label&relations[comments][attributes][]=id&relations[comments][attributes][]=text
 }
