@@ -485,7 +485,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
     {
-        $query = $this-eagerLoadRelations();
+        $query = $this->eagerLoadRelations();
         
         //filters
         if (!empty($filters)) {
