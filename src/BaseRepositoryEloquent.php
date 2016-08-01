@@ -114,7 +114,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
                     // with index that is a relation name
                     if (array_key_exists('attributes', $rules)) {
                         $eagerLoads[$index] = function ($q) use ($rules) {
-                            $q->select($rules['attributes']);
+                            $q->addSelect($rules['attributes']);
                         };
                     } else {
                         array_push($eagerLoads, $index);
