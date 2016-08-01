@@ -84,21 +84,43 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     protected function eagerLoadRelations()
     {
         $query = $this->query ?: $this->model;
-        // dd($this);
+
+        // if (is_array($this->eagerLoadRelations)) {
+        //     $eagerLoads = [];
+
+        //     foreach ($this->eagerLoadRelations as $relation => $rules) {
+        //         $rules = is_array($rules) ? $rules : [$rules];
+        //         if (array_key_exists('attributes', $rules)) {
+        //             $eagerLoads[$relation] = function ($q) use ($rules) {
+        //                 $q->select($rules['attributes']);
+        //             };
+        //         } else {
+        //             $eagerLoads[] = $relation;
+        //         }
+        //     }
+        //     return $query->with($eagerLoads);
+        // }
 
         if (is_array($this->eagerLoadRelations)) {
             $eagerLoads = [];
 
-            foreach ($this->eagerLoadRelations as $relation => $rules) {
-                if (array_key_exists('attributes', $rules)) {
-                    $eagerLoads[$relation] = function ($q) use ($rules) {
-                        $q->select($rules['attributes']);
-                    };
+            foreach ($this->eagerLoadRelations as $index => $rules) {
+                // test case for relations[]=relation_name
+                // with index that is numeric
+                if (is_numeric($index)) {
+                    array_push($eagerLoads, $rules);
                 } else {
-                    $eagerLoads[] = $relation;
+                    // test case for relations[relation_name][attribs][]=attrib_name
+                    // with index that is a relation name
+                    if (array_key_exists('attributes', $rules)) {
+                        $eagerLoads[$index] = function ($q) use ($rules) {
+                            $q->select($rules['attributes']);
+                        };
+                    } else {
+                        array_push($eagerLoads, $index);
+                    }
                 }
             }
-
             return $query->with($eagerLoads);
         }
 
