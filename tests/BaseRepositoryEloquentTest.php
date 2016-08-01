@@ -25,6 +25,21 @@ class BaseRepositoryEloquentTest extends TestCase
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
         ");
 
+        $table = "`{$this->db['database']}`.`targets`";
+
+        $this->pdoExec("DROP TABLE IF EXISTS {$table}");
+        
+        $this->pdoExec("
+            CREATE TABLE IF NOT EXISTS {$table} (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `spy_id` int(10) unsigned NULL,
+              `name` varchar(255) NOT NULL COMMENT '',
+              `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+              `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ");
+
         $this->repo = new SpyRepositoryEloquent(new Spy);
     }
 
@@ -534,8 +549,19 @@ class BaseRepositoryEloquentTest extends TestCase
     //     $this->assertEquals($spies, null);
     // }
 
+    public function seedWithTarget()
+    {
+        $this->seed();
+
+        $spy = $this->repo->first();
+
+        $spy->target()->save(new Target(['name' => 'laptop']));
+    }
+
     public function testShouldEagerLoadRelations()
     {
+        $this->seedWithTarget();
+
         $spy = $this->repo->with('target')->first();
 
         $this->assertTrue($spy->getRelation("target") instanceof Target);
