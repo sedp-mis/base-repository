@@ -85,6 +85,22 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     {
         $query = $this->query ?: $this->model;
 
+        if (is_array($this->eagerLoadRelations)) {
+            $eagerLoads = [];
+
+            foreach ($this->eagerLoadRelations as $relation => $rules) {
+                if (array_key_exists('attributes', $rules)) {
+                    $eagerLoads[$relation] = function ($q) use ($rules) {
+                        $q->select($rules['attributes']);
+                    };
+                } else {
+                    $eagerLoads[] = $relation;
+                }
+            }
+
+            $query->with($eagerLoads);
+        }
+
         return $query->with($this->eagerLoadRelations);
     }
 
