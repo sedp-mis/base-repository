@@ -98,7 +98,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
                 }
             }
 
-            $query->with($eagerLoads);
+            return $query->with($eagerLoads);
         }
 
         return $query->with($this->eagerLoadRelations);
