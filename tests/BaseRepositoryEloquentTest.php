@@ -449,105 +449,105 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "katrina");
     }
 
-    // public function testSearchComparison()
-    // {
-    //     $this->seed();
-    //     $this->seedMoreForPaginate();
+    public function testSearchComparison()
+    {
+        $this->seed();
+        $this->seedMoreForPaginate();
 
-    //     $attributes = [
-    //         'username',
-    //         'name'
-    //     ];
+        $attributes = [
+            'username',
+            'name'
+        ];
 
-    //     $filters = [
-    //         'xp' => [
-    //             '=' => [
-    //                 352, 
-    //                 57,
-    //                 86,
-    //                 145,
-    //                 41,
-    //                 321,
-    //                 512,
-    //                 91
-    //             ]
-    //         ]
-    //     ];
+        $filters = [
+            'xp' => [
+                '=' => [
+                    352, 
+                    57,
+                    86,
+                    145,
+                    41,
+                    321,
+                    512,
+                    91
+                ]
+            ]
+        ];
 
-    //     $sort = [
-    //         'name' => 'desc'
-    //     ];
+        $sort = [
+            'name' => 'desc'
+        ];
 
-    //     // test the value for an existing data in column "name"
-    //     $spies = $this->repo->search("ken", $attributes, $filters, $sort);
+        // test the value for an existing data in column "name"
+        $spies = $this->repo->search("ken", $attributes, $filters, $sort);
 
-    //     $this->assertEquals($spies, "name");
+        $this->assertEquals($spies, "name");
 
-    //     // test the value for a non-existing data in column "name"
-    //     $spies = $this->repo->search("mark", $attributes, $filters, $sort);
+        // test the value for a non-existing data in column "name"
+        $spies = $this->repo->search("mark", $attributes, $filters, $sort);
 
-    //     $this->assertEquals($spies, null);
+        $this->assertEquals($spies, null);
 
-    //     // test the value for an existing data in column "username"
-    //     $spies = $this->repo->search("jmoane", $attributes, $filters, $sort);
+        // test the value for an existing data in column "username"
+        $spies = $this->repo->search("jmoane", $attributes, $filters, $sort);
 
-    //     $this->assertEquals($spies, "username");
+        $this->assertEquals($spies, "username");
 
-    //     // test the value for a non-existing data in column "username"
-    //     $spies = $this->repo->search("joypintor", $attributes, $filters, $sort);
+        // test the value for a non-existing data in column "username"
+        $spies = $this->repo->search("joypintor", $attributes, $filters, $sort);
 
-    //     $this->assertEquals($spies, null);
-    // }
+        $this->assertEquals($spies, null);
+    }
 
-    // public function testSearchComparisonWithPagination()
-    // {
-    //     $this->seed();
-    //     $this->seedMoreForPaginate();
+    public function testSearchComparisonWithPagination()
+    {
+        $this->seed();
+        $this->seedMoreForPaginate();
 
-    //     $attributes = [
-    //         'username',
-    //         'name'
-    //     ];
+        $attributes = [
+            'username',
+            'name'
+        ];
 
-    //     $filters = [
-    //         'xp' => [
-    //             '=' => [
-    //                 352, 
-    //                 57,
-    //                 86,
-    //                 145,
-    //                 41,
-    //                 321,
-    //                 512,
-    //                 91
-    //             ]
-    //         ]
-    //     ];
+        $filters = [
+            'xp' => [
+                '=' => [
+                    352, 
+                    57,
+                    86,
+                    145,
+                    41,
+                    321,
+                    512,
+                    91
+                ]
+            ]
+        ];
 
-    //     $sort = [
-    //         'name' => 'desc'
-    //     ];
+        $sort = [
+            'name' => 'desc'
+        ];
 
-    //     // test value for an existing data on page 1 with 3 data per page
-    //     $spies = $this->repo->searchPaginate("tine", $attributes, $filters, $sort, 3, 1);
+        // test value for an existing data on page 1 with 3 data per page
+        $spies = $this->repo->searchPaginate("tine", $attributes, $filters, $sort, 3, 1);
         
-    //     $this->assertEquals($spies, "name");
+        $this->assertEquals($spies, "name");
 
-    //     // test value for a non-existing data on page 1 with 3 data per page
-    //     $spies = $this->repo->searchPaginate("katrina", $attributes, $filters, $sort, 3, 1);
+        // test value for a non-existing data on page 1 with 3 data per page
+        $spies = $this->repo->searchPaginate("katrina", $attributes, $filters, $sort, 3, 1);
         
-    //     $this->assertEquals($spies, null);
+        $this->assertEquals($spies, null);
 
-    //     // test value for an existing data on page 2 with 2 data per page
-    //     $spies = $this->repo->searchPaginate("cklucido", $attributes, $filters, $sort, 2, 2);
+        // test value for an existing data on page 2 with 2 data per page
+        $spies = $this->repo->searchPaginate("cklucido", $attributes, $filters, $sort, 2, 2);
         
-    //     $this->assertEquals($spies, "username");
+        $this->assertEquals($spies, "username");
 
-    //     // test value for a non-existing data on page 2 with 2 data per page
-    //     $spies = $this->repo->searchPaginate("kharen", $attributes, $filters, $sort, 2, 2);
+        // test value for a non-existing data on page 2 with 2 data per page
+        $spies = $this->repo->searchPaginate("kharen", $attributes, $filters, $sort, 2, 2);
         
-    //     $this->assertEquals($spies, null);
-    // }
+        $this->assertEquals($spies, null);
+    }
 
     public function seedWithTarget()
     {
@@ -580,9 +580,8 @@ class BaseRepositoryEloquentTest extends TestCase
             ]
         ];
 
-        $spy = $this->repo->with('target')->first();
-
-        dd($spy->toArray());
+        $spy = $this->repo->with($relations)->first();
+        dd($spy);
     }
 
     // URL

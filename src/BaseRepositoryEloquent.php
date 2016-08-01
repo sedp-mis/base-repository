@@ -84,6 +84,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     protected function eagerLoadRelations()
     {
         $query = $this->query ?: $this->model;
+        // dd($this);
 
         if (is_array($this->eagerLoadRelations)) {
             $eagerLoads = [];
