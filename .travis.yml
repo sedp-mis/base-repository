@@ -13,5 +13,6 @@ services:
 before_script: 
   - composer install
   - mysql -u root -e "CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secret'; GRANT ALL PRIVILEGES ON * . * TO 'homestead'@'localhost'; FLUSH PRIVILEGES;"
+  - composer dump-autoload
   
 script: ./vendor/bin/phpunit
