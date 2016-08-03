@@ -553,7 +553,7 @@ class BaseRepositoryEloquentTest extends TestCase
     {
         $this->seed();
 
-        $spy = $this->repo->first();
+        $spy = Spy::first();
 
         $spy->target()->save(new Target(['name' => 'laptop']));
     }
@@ -581,7 +581,8 @@ class BaseRepositoryEloquentTest extends TestCase
         ];
 
         $spy = $this->repo->with($relations)->first();
-        dd($spy);
+        
+        $this->assertTrue($spy->getRelation("target") instanceof Target);
     }
 
     // URL

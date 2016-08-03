@@ -85,40 +85,25 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     {
         $query = $this->query ?: $this->model;
 
-        // if (is_array($this->eagerLoadRelations)) {
-        //     $eagerLoads = [];
-
-        //     foreach ($this->eagerLoadRelations as $relation => $rules) {
-        //         $rules = is_array($rules) ? $rules : [$rules];
-        //         if (array_key_exists('attributes', $rules)) {
-        //             $eagerLoads[$relation] = function ($q) use ($rules) {
-        //                 $q->select($rules['attributes']);
-        //             };
-        //         } else {
-        //             $eagerLoads[] = $relation;
-        //         }
-        //     }
-        //     return $query->with($eagerLoads);
-        // }
-
         if (is_array($this->eagerLoadRelations)) {
             $eagerLoads = [];
 
-            foreach ($this->eagerLoadRelations as $index => $rules) {
-                // test case for relations[]=relation_name
-                // with index that is numeric
-                if (is_numeric($index)) {
-                    array_push($eagerLoads, $rules);
+            foreach ($this->eagerLoadRelations as $relation => $rules) {
+                // case for relations[]=relation_name
+                // with relation that is numeric
+                $relation = (is_integer($relation)) ? $rules : $relation;
+
+                // case for relations[relation_name][attributes][]=attrib_name
+                // with relation that is a relation name
+                if (array_key_exists('attributes', $rules)) {
+                    $eagerLoads[$relation] = function ($q) use ($rules) {
+                        if (!in_array($fk = $this->model->getForeignKey(), $rules['attributes'])) {
+                            array_push($rules['attributes'], $fk);
+                        }
+                        $q->select($rules['attributes']);
+                    };
                 } else {
-                    // test case for relations[relation_name][attribs][]=attrib_name
-                    // with index that is a relation name
-                    if (array_key_exists('attributes', $rules)) {
-                        $eagerLoads[$index] = function ($q) use ($rules) {
-                            $q->addSelect($rules['attributes']);
-                        };
-                    } else {
-                        array_push($eagerLoads, $index);
-                    }
+                    array_push($eagerLoads, $relation);
                 }
             }
             return $query->with($eagerLoads);
