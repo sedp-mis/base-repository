@@ -28,5 +28,5 @@
             "test_classes/"
         ]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
