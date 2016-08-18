@@ -521,6 +521,8 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
                         $query->whereIn($key, $values);
                     } else if ($operator == "!=") {
                         $query->whereNotIn($key, $values);
+                    } else if ($operator == "==") {
+                        $query->whereNull($key);
                     } else {
                         $query->where($key, $operator, head($values));
                     }
