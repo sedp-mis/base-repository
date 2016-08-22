@@ -558,4 +558,24 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     {
         return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
     }
+
+    /**
+     * Return the underlying query.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function query()
+    {
+        return $this->eagerLoadRelations();
+    }
+
+    /**
+     * Return the underlying model.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function model()
+    {
+        return $this->model;
+    }
 }
