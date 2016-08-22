@@ -551,7 +551,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     * @param array $fiters
     * @param array $sort
     * @param int|null $perPage
-    * @param int|1 $page
+    * @param int $page
     * @return array
     */
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
