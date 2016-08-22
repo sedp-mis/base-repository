@@ -85,6 +85,30 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     {
         $query = $this->query ?: $this->model;
 
+        if (is_array($this->eagerLoadRelations)) {
+            $eagerLoads = [];
+
+            foreach ($this->eagerLoadRelations as $relation => $rules) {
+                // case for relations[]=relation_name
+                // with relation that is numeric
+                $relation = (is_integer($relation)) ? $rules : $relation;
+
+                // case for relations[relation_name][attributes][]=attrib_name
+                // with relation that is a relation name
+                if (is_array($rules) && array_key_exists('attributes', $rules)) {
+                    $eagerLoads[$relation] = function ($q) use ($rules) {
+                        if (!in_array($fk = $this->model->getForeignKey(), $rules['attributes'])) {
+                            array_push($rules['attributes'], $fk);
+                        }
+                        $q->select($rules['attributes']);
+                    };
+                } else {
+                    array_push($eagerLoads, $relation);
+                }
+            }
+            return $query->with($eagerLoads);
+        }
+
         return $query->with($this->eagerLoadRelations);
     }
 
@@ -467,6 +491,72 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         $this->query = $query->has($relation, $operator, $count);
 
         return $this;
+    }
+
+    /**
+     * Fetching data from Eloquent with filtering, sorting and limit-offset
+     *
+     * @param array $attributes
+     * @param array $fiters
+     * @param array $sort
+     * @param int|null $limit
+     * @param int|0 $offset
+     * @return array
+     */
+    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
+    {
+        $query = $this->eagerLoadRelations();
+        
+        //filters
+        if (!empty($filters)) {
+            foreach ($filters as $key => $filter) {
+                foreach ($filter as $operator => $values) {
+                    $values = is_array($values) ? $values : [$values];
+
+                    if ($operator == "=") {
+                        $query->whereIn($key, $values);
+                    } else if ($operator == "!=") {
+                        $query->whereNotIn($key, $values);
+                    } else if ($operator == "==") {
+                        $query->whereNull($key);
+                    } else {
+                        $query->where($key, $operator, head($values));
+                    }
+                }
+            }
+        }
+
+        //sort
+        if (!empty($sort)) {
+            // sort models 
+            foreach ($sort as $attribute => $order) {
+                $query->orderBy($attribute, $order);
+            }
+        }
+
+        //limit and offset
+        if (!empty($limit)){
+            $query->take($limit)->offset($offset);
+        }
+
+        //attributes
+        $attributes = empty($attributes) ? ['*'] : $attributes;
+        return $query->get($attributes);
+    }
+
+    /**
+    * Return a collection of models base from the attribute filters and by paginated approach.
+    *
+    * @param array $attributes
+    * @param array $fiters
+    * @param array $sort
+    * @param int|null $perPage
+    * @param int|1 $page
+    * @return array
+    */
+    public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
+    {
+        return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
     }
 
     /**
