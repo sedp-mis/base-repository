@@ -513,12 +513,14 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
                 foreach ($filter as $operator => $values) {
                     $values = is_array($values) ? $values : [$values];
 
-                    if ($operator == "=") {
+                    if ($operator == '=') {
                         $query->whereIn($key, $values);
-                    } else if ($operator == "!=") {
+                    } elseif ($operator == '!=') {
                         $query->whereNotIn($key, $values);
-                    } else if ($operator == "==") {
+                    } elseif ($operator == 'null') {
                         $query->whereNull($key);
+                    } elseif ($operator == 'not_null') {
+                        $query->whereNotNull($key);
                     } else {
                         $query->where($key, $operator, head($values));
                     }
@@ -535,13 +537,11 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         //limit and offset
-        if (!empty($limit)){
-            $query->take($limit)->offset($offset);
+        if ($limit) {
+            $query->take($limit)->skip($offset);
         }
 
-        //attributes
-        $attributes = empty($attributes) ? ['*'] : $attributes;
-        return $query->get($attributes);
+        return $query->get($attributes ?: ['*']);
     }
 
     /**
