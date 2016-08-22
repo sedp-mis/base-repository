@@ -493,12 +493,8 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         return $this;
     }
 
-
-
-    // New methods
-
     /**
-     * Fetching data from Eloquent with pagination, filtering, sorting and limit/offset
+     * Fetching data from Eloquent with filtering, sorting and limit-offset
      *
      * @param array $attributes
      * @param array $fiters
@@ -559,57 +555,5 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
     {
         return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
-    }
-
-    /**
-    * Return a collection of models base from search comparison.
-    *
-    * @param string $comparison
-    * @param array $attributes
-    * @param array $fiters
-    * @param array $sort
-    * @param int|null $perPage
-    * @param int|1 $page
-    * @return array
-     */
-    public function search($comparison, $attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
-    {  
-        $fetchResult = $this->fetch($attributes, $filters, $sort, $limit, $offset);
-        $searchReturn = null;
-        if (!empty($comparison)) {
-            foreach ($fetchResult as $result) {
-               $found = array_search($comparison, $result->toArray());
-               if ($found) {
-                    $searchReturn = $found;
-                    break;
-               }
-            }
-            return $searchReturn;
-        }
-    }
-
-    /**
-    * Return a collection of models base from search comparison using paginate approach.
-    *
-    * @param string $comparison
-    * @param array $attributes
-    * @param array $fiters
-    * @param array $sort
-    * @param int|null $perPage
-    * @param int|1 $page
-    * @return array
-    */
-    public function searchPaginate($comparison, $attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
-    {
-        $fetchResult = $this->paginate($attributes, $filters, $sort, $perPage, $page);
-        $searchPaginateReturn = null;
-        foreach ($fetchResult as $result) {
-            $found = array_search($comparison, $result->toArray());
-            if ($found) {
-                $searchPaginateReturn = $found;
-                break;
-            }
-        }
-        return $searchPaginateReturn;
     }
 }
