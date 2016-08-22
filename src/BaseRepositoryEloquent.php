@@ -500,7 +500,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      * @param array $fiters
      * @param array $sort
      * @param int|null $limit
-     * @param int|0 $offset
+     * @param int $offset
      * @return array
      */
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
