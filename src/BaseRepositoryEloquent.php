@@ -494,7 +494,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Fetching data from Eloquent with filtering, sorting and limit-offset
+     * Fetching eloquent models with filtering, sorting and limit-offset
      *
      * @param array $attributes
      * @param array $fiters
