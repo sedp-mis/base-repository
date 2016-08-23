@@ -689,6 +689,18 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
+     * Set hasRelations.
+     *
+     * @return boolean
+     */
+    public function hasRelations($hasRelations = [])
+    {
+        $this->hasRelations = $hasRelations;
+
+        return $this;
+    }
+
+    /**
      * Set basic filters.
      *
      * @param  array  $filters
@@ -772,6 +784,6 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function get($attributes = ['*'])
     {
-        return $this->query()->get($this->attributes);
+        return $this->query()->get($attributes ?: $this->attributes);
     }
 }

@@ -38,6 +38,8 @@ interface RepositoryInterface
 
     public function attributes($attributes = ['*']);
     
+    public function hasRelations($hasRelations = []);
+
     public function filters($filters = []);
 
     public function sort($sort = []);
