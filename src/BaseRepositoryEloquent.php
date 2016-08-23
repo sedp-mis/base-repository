@@ -784,6 +784,10 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function get($attributes = ['*'])
     {
-        return $this->query()->get($attributes ?: $this->attributes);
+        if ($attributes == ['*'] && $this->attributes != ['*']) {
+            $attributes = $this->attributes;
+        }
+
+        return $this->query()->get($attributes);
     }
 }
