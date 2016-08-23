@@ -56,13 +56,12 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     protected $offset = 0;
 
-
     /**
-     * Query to fetch model.
+     * Has relation checking.
      *
-     * @var \Illuminate\Database\Eloquent\Builder
+     * @var array
      */
-    protected $query;
+    protected $hasRelations = [];
 
     /**
      * Update model when id or primary key exists in model attributes, instead inserting new model.
@@ -119,7 +118,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     protected function eagerLoadRelations()
     {
-        $query = $this->query ?: $this->model;
+        $query = $this->model;
 
         if (is_array($this->eagerLoadRelations)) {
             $eagerLoads = [];
@@ -522,11 +521,28 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function has($relation, $operator = '>=', $count = 1)
     {
-        $query = $this->query ?: $this->model;
-
-        $this->query = $query->has($relation, $operator, $count);
+        $this->hasRelations[$relation] = [$operator, $count];
 
         return $this;
+    }
+
+    /**
+     * Query has relations.
+     *
+     * @param  [type] $query
+     * @param  array  $hasRelations
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function queryHasRelations($query, $hasRelations = [])
+    {
+        $hasRelations = $hasRelations ?: $this->hasRelations;
+
+        foreach ($hasRelations as $relation => $operatorCount) {
+            list($operator, $count) = $operatorCount;
+            $query->has($relation, $operator, $count);
+        }
+
+        return $query;
     }
 
     /**
@@ -646,7 +662,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function query()
     {
-        return $this->query ?: $this->prepareQuery();
+        return $this->prepareQuery();
     }
 
     /**
@@ -731,10 +747,10 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     protected function prepareQuery()
     {
-        $this->query = $this->model->query();
-
         // relations
         $query = $this->eagerLoadRelations();
+
+        $this->queryHasRelations($query);
 
         //filters
         $this->queryFilters($query);
@@ -745,7 +761,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         //limit and offset
         $this->queryLimitOffset($query);
 
-        return $this->query = $query;
+        return $query;
     }
 
     /**
