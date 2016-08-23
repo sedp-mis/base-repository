@@ -35,4 +35,16 @@ interface RepositoryInterface
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0);
 
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1);
+
+    public function attributes($attributes = ['*']);
+    
+    public function filters($filters = []);
+
+    public function sort($sort = []);
+
+    public function limit($limit);
+
+    public function offset($offset);
+
+    public function get($attributes = ['*']);
 }

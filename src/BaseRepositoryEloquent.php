@@ -22,6 +22,42 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     protected $eagerLoadRelations = [];
 
     /**
+     * Attributes to be selected.
+     *
+     * @var array
+     */
+    protected $attributes = ['*'];
+
+    /**
+     * Filters for retrieving models.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * Sort rules for retrieving models.
+     *
+     * @var array
+     */
+    protected $sort = [];
+
+    /**
+     * Limit models retrieval.
+     *
+     * @var integer
+     */
+    protected $limit = 0;
+
+    /**
+     * Offset models retrieval.
+     *
+     * var integer
+     */
+    protected $offset = 0;
+
+
+    /**
      * Query to fetch model.
      *
      * @var \Illuminate\Database\Eloquent\Builder
@@ -494,6 +530,75 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
+     * Query filters.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function queryFilters($query, $filters = [])
+    {
+        $filters = $filters ?: $this->filters;
+
+        foreach ($filters as $key => $filter) {
+            foreach ($filter as $operator => $values) {
+                $values = is_array($values) ? $values : [$values];
+
+                if ($operator == '=') {
+                    $query->whereIn($key, $values);
+                } elseif ($operator == '!=') {
+                    $query->whereNotIn($key, $values);
+                } elseif ($operator == 'null') {
+                    $query->whereNull($key);
+                } elseif ($operator == 'not_null') {
+                    $query->whereNotNull($key);
+                } else {
+                    $query->where($key, $operator, head($values));
+                }
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Query sort.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  array  $sort
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function querySort($query, $sort = [])
+    {
+        $sort = $sort ?: $this->sort;
+
+        foreach ($sort as $attribute => $order) {
+            $query->orderBy($attribute, $order);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Query limit and offset.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int|null  $limit
+     * @param  int $offset
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function queryLimitOffset($query, $limit = null, $offset = 0)
+    {
+        $limit  = $limit ?: $this->limit;
+        $offset = $offset ?: $this->offset;
+
+        if ($limit) {
+            $query->take($limit)->skip($offset);
+        }
+
+        return $query;        
+    }
+
+    /**
      * Fetching eloquent models with filtering, sorting and limit-offset.
      *
      * @param array $attributes
@@ -508,38 +613,13 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         $query = $this->eagerLoadRelations();
         
         //filters
-        if (!empty($filters)) {
-            foreach ($filters as $key => $filter) {
-                foreach ($filter as $operator => $values) {
-                    $values = is_array($values) ? $values : [$values];
-
-                    if ($operator == '=') {
-                        $query->whereIn($key, $values);
-                    } elseif ($operator == '!=') {
-                        $query->whereNotIn($key, $values);
-                    } elseif ($operator == 'null') {
-                        $query->whereNull($key);
-                    } elseif ($operator == 'not_null') {
-                        $query->whereNotNull($key);
-                    } else {
-                        $query->where($key, $operator, head($values));
-                    }
-                }
-            }
-        }
+        $this->queryFilters($query, $filters);
 
         //sort
-        if (!empty($sort)) {
-            // sort models 
-            foreach ($sort as $attribute => $order) {
-                $query->orderBy($attribute, $order);
-            }
-        }
+        $this->querySort($query, $sort);
 
         //limit and offset
-        if ($limit) {
-            $query->take($limit)->skip($offset);
-        }
+        $this->queryLimitOffset($query, $limit, $offset);
 
         return $query->get($attributes ?: ['*']);
     }
@@ -566,7 +646,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function query()
     {
-        return $this->eagerLoadRelations();
+        return $this->query ?: $this->prepareQuery();
     }
 
     /**
@@ -577,5 +657,105 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     public function model()
     {
         return $this->model;
+    }
+
+    /**
+     * Set attributes to be selected.
+     *
+     * @param  array  $attributes
+     * @return $this
+     */
+    public function attributes($attributes = ['*'])
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Set basic filters.
+     *
+     * @param  array  $filters
+     * @return $this
+     */
+    public function filters($filters = [])
+    {
+        $this->filters = $filters;
+
+        return $this;
+    }
+
+    /**
+     * Set sort.
+     *
+     * @param  array  $sort
+     * @return $this
+     */
+    public function sort($sort = [])
+    {
+        $this->sort = $sort;
+
+        return $this;
+    }
+
+    /**
+     * Set limit.
+     *
+     * @param  int $limit
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * Set offset.
+     *
+     * @param  int $offset
+     * @return $this
+     */
+    public function offset($offset)
+    {
+        $this->offset = $offset;
+
+        return $this;
+    }
+
+    /**
+     * Prepare query to fetch models.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function prepareQuery()
+    {
+        $this->query = $this->model->query();
+
+        // relations
+        $query = $this->eagerLoadRelations();
+
+        //filters
+        $this->queryFilters($query);
+
+        //sort
+        $this->querySort($query);
+
+        //limit and offset
+        $this->queryLimitOffset($query);
+
+        return $this->query = $query;
+    }
+
+    /**
+     * Get models with applied query.
+     *
+     * @param array $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function get($attributes = ['*'])
+    {
+        return $this->query()->get($this->attributes);
     }
 }
