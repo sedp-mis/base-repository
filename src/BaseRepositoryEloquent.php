@@ -4,6 +4,9 @@ namespace SedpMis\BaseRepository;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Schema\Grammars\MySqlGrammar;
+
 
 abstract class BaseRepositoryEloquent implements RepositoryInterface
 {
@@ -777,6 +780,23 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
+     * Return the final attributes to be selected.
+     *
+     * @param  array  $attributes
+     * @return array
+     */
+    protected function selectAttributes($attributes = ['*'])
+    {
+        $attributes = $attributes ?: ['*'];
+
+        if ($attributes == ['*'] && $this->attributes != ['*']) {
+            $attributes = $this->attributes;
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Get models with applied query.
      *
      * @param array $attributes
@@ -784,10 +804,42 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function get($attributes = ['*'])
     {
-        if ($attributes == ['*'] && $this->attributes != ['*']) {
-            $attributes = $this->attributes;
+        return $this->query()->get($this->selectAttributes($attributes));
+    }
+
+    /**
+     * Search a text against the given attributes.
+     *
+     * @param  string $text
+     * @param  array  $compareAttributes
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function search($text, array $compareAttributes = ['*'], $attributes = ['*'])
+    {
+        $query = $this->query();
+
+        if ($compareAttributes == ['*']) {
+            $compareAttributes = $this->getTableColumns($this->model->getTable());
         }
 
-        return $this->query()->get($attributes);
+        foreach ($compareAttributes as $column) {
+            $query->orWhere($column, 'like', '%'.join('%',str_split($text)).'%');
+        }
+
+        return $query->get($attributes);
+    }
+
+    protected function getTableColumns($table)
+    {
+        $sql      = (new MySqlGrammar)->compileColumnExists();
+        $database = Capsule::connection()->getDatabaseName();
+        $table    = Capsule::connection()->getTablePrefix().$table;
+
+        $results = Capsule::connection()->select($sql, [$database, $table]);
+
+        return array_map(function ($result) {
+            return $result['column_name'];
+        }, $results);
     }
 }

@@ -49,4 +49,6 @@ interface RepositoryInterface
     public function offset($offset);
 
     public function get($attributes = ['*']);
+
+    public function search($text, array $compareAttributes = ['*'], $attributes = ['*']);
 }

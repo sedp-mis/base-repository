@@ -1,5 +1,8 @@
 <?php
 
+// Sample URL
+// http://localhost:8000/api/v1/posts?relations[]=label&relations[comments][attributes][]=id&relations[comments][attributes][]=text
+
 class BaseRepositoryEloquentTest extends TestCase
 {
     protected $repo;
@@ -485,6 +488,17 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertTrue($spy->getRelation("target") instanceof Target);
     }
 
-    // URL
-    // http://localhost:8000/api/v1/posts?relations[]=label&relations[comments][attributes][]=id&relations[comments][attributes][]=text
+    public function testSearch()
+    {
+        $this->seed();
+        $spies = $this->repo->search('kat');
+
+        $this->assertEquals(1, $spies->count());
+        $this->assertEquals('katbritanico', $spies->first()->username);
+
+        $spies = $this->repo->search('mark');
+
+        $this->assertEquals(1, $spies->count());
+        $this->assertEquals('markii1607', $spies->first()->username);
+    }   
 }
