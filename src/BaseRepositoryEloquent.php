@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Grammars\MySqlGrammar;
 
-
 abstract class BaseRepositoryEloquent implements RepositoryInterface
 {
     /**
