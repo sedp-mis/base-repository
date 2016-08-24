@@ -826,7 +826,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
             $query->orWhere($column, 'like', '%'.join('%',str_split($text)).'%');
         }
 
-        return $query->get($attributes);
+        return $query->get($this->selectAttributes($attributes));
     }
 
     protected function getTableColumns($table)
