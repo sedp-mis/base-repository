@@ -6,15 +6,15 @@ interface RepositoryInterface
 {
     public function with($relations);
 
-    public function all($attributes = array('*'));
+    public function all($attributes = ['*']);
 
-    public function find($id, $attributes = array('*'));
+    public function find($id, $attributes = ['*']);
 
-    public function findWhere(array $whereAttributes, $attributes = array('*'));
+    public function findWhere(array $whereAttributes, $attributes = ['*']);
 
-    public function findOrNew($id, $attributes = array('*'));
+    public function findOrNew($id, $attributes = ['*']);
 
-    public function findOrFail($id, $attributes = array('*'));
+    public function findOrFail($id, $attributes = ['*']);
 
     public function first(array $attributes = null);
 
@@ -50,5 +50,5 @@ interface RepositoryInterface
 
     public function get($attributes = ['*']);
 
-    public function search($text, array $compareAttributes = ['*'], $attributes = ['*']);
+    public function search($text, $compareAttributes = ['*'], $attributes = ['*']);
 }

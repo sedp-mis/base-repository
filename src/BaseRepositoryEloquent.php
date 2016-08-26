@@ -816,7 +816,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function search($text, array $compareAttributes = ['*'], $attributes = ['*'])
+    public function search($text, $compareAttributes = ['*'], $attributes = ['*'])
     {
         $query = $this->query();
 
