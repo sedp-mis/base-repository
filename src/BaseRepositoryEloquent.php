@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Grammars\MySqlGrammar;
+use Illuminate\Support\Facades\Schema;
 
 abstract class BaseRepositoryEloquent implements RepositoryInterface
 {
@@ -835,6 +836,10 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
 
     protected function getTableColumns($table)
     {
+        if (app()) {
+            return Schema::getColumnListing($table);
+        }
+
         $sql      = (new MySqlGrammar)->compileColumnExists();
         $database = Capsule::connection()->getDatabaseName();
         $table    = Capsule::connection()->getTablePrefix().$table;
