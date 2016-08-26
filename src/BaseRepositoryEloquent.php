@@ -561,6 +561,8 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
             foreach ($filter as $operator => $values) {
                 $values = is_array($values) ? $values : [$values];
 
+                $operator = is_numeric($operator) ? '=' : $operator;
+
                 if ($operator == '=') {
                     $query->whereIn($key, $values);
                 } elseif ($operator == '!=') {
