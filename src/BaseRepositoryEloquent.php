@@ -820,6 +820,8 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     {
         $query = $this->query();
 
+        $compareAttributes = $compareAttributes ?: ['*'];
+
         if ($compareAttributes == ['*']) {
             $compareAttributes = $this->getTableColumns($this->model->getTable());
         }
