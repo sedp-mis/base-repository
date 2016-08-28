@@ -4,8 +4,6 @@ namespace SedpMis\BaseRepository;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Database\Schema\Grammars\MySqlGrammar;
 use Illuminate\Support\Facades\Schema;
 
 abstract class BaseRepositoryEloquent implements RepositoryInterface
@@ -824,7 +822,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         $compareAttributes = $compareAttributes ?: ['*'];
 
         if ($compareAttributes == ['*']) {
-            $compareAttributes = $this->getTableColumns($this->model->getTable());
+            $compareAttributes = Schema::getColumnListing($this->model->getTable());
         }
 
         foreach ($compareAttributes as $column) {
@@ -832,22 +830,5 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         return $query->get($this->selectAttributes($attributes));
-    }
-
-    protected function getTableColumns($table)
-    {
-        if (app()) {
-            return Schema::getColumnListing($table);
-        }
-
-        $sql      = (new MySqlGrammar)->compileColumnExists();
-        $database = Capsule::connection()->getDatabaseName();
-        $table    = Capsule::connection()->getTablePrefix().$table;
-
-        $results = Capsule::connection()->select($sql, [$database, $table]);
-
-        return array_map(function ($result) {
-            return $result['column_name'];
-        }, $results);
     }
 }

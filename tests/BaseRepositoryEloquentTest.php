@@ -69,7 +69,7 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals($updatedSpy->getAttributes(), $storedSpy->getAttributes());
     }
 
-    public function seed()
+    public function seedDb()
     {
         $spies = [
             [
@@ -151,7 +151,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testShouldFetchWithGivenAttributes()
     {
-        $this->seed();
+        $this->seedDb();
 
         $attributes = [
             'username',
@@ -169,7 +169,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchFiltersUsingEquals()
     {
-        $this->seed();
+        $this->seedDb();
 
         // Test `=` with single value
         $spies = $this->repo->fetch(null, ['xp' => [
@@ -200,7 +200,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchFiltersUsingNotEquals()
     {
-        $this->seed();
+        $this->seedDb();
 
         // Test `!=` with single value
         $spies = $this->repo->fetch(null, ['xp' => [
@@ -231,7 +231,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchFiltersUsingGreaterThan()
     {
-        $this->seed();
+        $this->seedDb();
 
         // Test `>`
         $spies = $this->repo->fetch(null, ['xp' => [
@@ -243,7 +243,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchFiltersUsingLessThan()
     {
-        $this->seed();
+        $this->seedDb();
 
         // Test `<`
         $spies = $this->repo->fetch(null, ['xp' => [
@@ -255,7 +255,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchFiltersUsingGreaterThanOrEqual()
     {
-        $this->seed();
+        $this->seedDb();
 
         // Test `>=`
         $spies = $this->repo->fetch(null, ['xp'=> [
@@ -267,7 +267,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchFiltersUsingLessThanOrEqual()
     {
-        $this->seed();
+        $this->seedDb();
         
         // Test `<=`
         $spies = $this->repo->fetch(null, ['xp'=> [
@@ -279,7 +279,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchSortAscAndDesc()
     {
-        $this->seed();
+        $this->seedDb();
 
         // Test for name in ascending order
         $spies=$this->repo->fetch(null, null, [
@@ -336,7 +336,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchLimitAndSkip()
     {
-        $this->seed();
+        $this->seedDb();
 
         // Test with limit of 2
         $spies=$this->repo->fetch(null, null, null, 2);
@@ -363,7 +363,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testFetchForAllParameters()
     {
-        $this->seed();
+        $this->seedDb();
 
         $attributes = [
             'username',
@@ -396,7 +396,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testPagination()
     {
-        $this->seed();
+        $this->seedDb();
         $this->seedMoreForPaginate();
 
         $attributes = [
@@ -454,7 +454,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function seedWithTarget()
     {
-        $this->seed();
+        $this->seedDb();
 
         $spy = Spy::first();
 
@@ -490,7 +490,7 @@ class BaseRepositoryEloquentTest extends TestCase
 
     public function testSearch()
     {
-        $this->seed();
+        $this->seedDb();
         $spies = $this->repo->search('kat');
 
         $this->assertEquals(1, $spies->count());
