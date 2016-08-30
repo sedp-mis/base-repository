@@ -808,14 +808,14 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Search a text against the given attributes.
+     * Search any input against the given attributes.
      *
-     * @param  string $text
+     * @param  string $input
      * @param  array  $compareAttributes
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function search($text, $compareAttributes = ['*'], $attributes = ['*'])
+    public function search($input, $compareAttributes = ['*'], $attributes = ['*'])
     {
         $query = $this->query();
 
@@ -826,7 +826,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         foreach ($compareAttributes as $column) {
-            $query->orWhere($column, 'like', '%'.join('%',str_split($text)).'%');
+            $query->orWhere($column, 'like', '%'.join('%',str_split($input)).'%');
         }
 
         return $query->get($this->selectAttributes($attributes));
