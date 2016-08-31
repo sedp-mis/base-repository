@@ -32,8 +32,10 @@ interface RepositoryInterface
 
     public function has($relation, $operator = '>=', $count = 1);
 
+    /** @deprecated */
     public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0);
 
+    /** @deprecated */
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1);
 
     public function attributes($attributes = ['*']);

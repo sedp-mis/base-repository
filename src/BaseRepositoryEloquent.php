@@ -620,6 +620,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Fetching eloquent models with filtering, sorting and limit-offset.
      *
+     * @deprecated Use builder pattern, get() method.
      * @param array $attributes
      * @param array $fiters
      * @param array $sort
@@ -646,6 +647,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     /**
     * Return a collection of models base from the attribute filters and by paginated approach.
     *
+    * @deprecated Use builder pattern, get() method.
     * @param array $attributes
     * @param array $fiters
     * @param array $sort
