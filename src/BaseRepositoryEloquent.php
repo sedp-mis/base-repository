@@ -530,7 +530,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Query has relations.
      *
-     * @param  [type] $query
+     * @param  \Illuminate\Database\Eloquent\Builder $query
      * @param  array  $hasRelations
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -767,6 +767,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         // relations
         $query = $this->eagerLoadRelations();
 
+        // has relations
         $this->queryHasRelations($query);
 
         //filters
