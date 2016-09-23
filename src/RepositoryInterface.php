@@ -129,30 +129,14 @@ interface RepositoryInterface
     public function has($relation, $operator = '>=', $count = 1);
 
     /**
-     * Fetching eloquent models with filtering, sorting and limit-offset.
+     * Return a collection of models by paginated approach.
      *
-     * @deprecated Use builder pattern, get() method
-     * @param  array    $attributes
-     * @param  array    $fiters
-     * @param  array    $sort
-     * @param  int|null $limit
-     * @param  int      $offset
-     * @return array
+     * @param  int $perPage
+     * @param  int|null      $page
+     * @param  array                                    $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0);
-
-    /**
-     * Return a collection of models base from the attribute filters and by paginated approach.
-     *
-     * @deprecated Use builder pattern, get() method
-     * @param  array    $attributes
-     * @param  array    $fiters
-     * @param  array    $sort
-     * @param  int|null $perPage
-     * @param  int      $page
-     * @return array
-     */
-    public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1);
+    public function paginate($perPage = 15, $page = null, $attributes = ['*']);
 
     /**
      * Set attributes to be selected.
