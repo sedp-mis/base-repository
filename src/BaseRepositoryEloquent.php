@@ -645,16 +645,16 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-    * Return a collection of models base from the attribute filters and by paginated approach.
-    *
-    * @deprecated Use builder pattern, get() method.
-    * @param array $attributes
-    * @param array $fiters
-    * @param array $sort
-    * @param int|null $perPage
-    * @param int $page
-    * @return array
-    */
+     * Return a collection of models base from the attribute filters and by paginated approach.
+     *
+     * @deprecated Use builder pattern, get() method.
+     * @param array $attributes
+     * @param array $fiters
+     * @param array $sort
+     * @param int|null $perPage
+     * @param int $page
+     * @return array
+     */
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
     {
         return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
