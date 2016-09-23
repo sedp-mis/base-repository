@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Schema;
 
-abstract class BaseRepositoryEloquent implements RepositoryInterface
+class BaseRepositoryEloquent implements RepositoryInterface
 {
     /**
      * Eloquent model.
@@ -99,7 +99,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function validationRules()
     {
-        return $this->validationRules;
+        return $this->validationRules ?: $this->model->rules() ?: [];
     }
 
     /**
@@ -530,7 +530,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Query has relations.
      *
-     * @param  [type] $query
+     * @param  \Illuminate\Database\Eloquent\Builder $query
      * @param  array  $hasRelations
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -620,6 +620,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Fetching eloquent models with filtering, sorting and limit-offset.
      *
+     * @deprecated Use builder pattern, get() method.
      * @param array $attributes
      * @param array $fiters
      * @param array $sort
@@ -644,15 +645,16 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-    * Return a collection of models base from the attribute filters and by paginated approach.
-    *
-    * @param array $attributes
-    * @param array $fiters
-    * @param array $sort
-    * @param int|null $perPage
-    * @param int $page
-    * @return array
-    */
+     * Return a collection of models base from the attribute filters and by paginated approach.
+     *
+     * @deprecated Use builder pattern, get() method.
+     * @param array $attributes
+     * @param array $fiters
+     * @param array $sort
+     * @param int|null $perPage
+     * @param int $page
+     * @return array
+     */
     public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
     {
         return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
@@ -765,6 +767,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         // relations
         $query = $this->eagerLoadRelations();
 
+        // has relations
         $this->queryHasRelations($query);
 
         //filters
@@ -808,14 +811,14 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Search a text against the given attributes.
+     * Search any input against the given attributes.
      *
-     * @param  string $text
+     * @param  string $input
      * @param  array  $compareAttributes
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function search($text, $compareAttributes = ['*'], $attributes = ['*'])
+    public function search($input, $compareAttributes = ['*'], $attributes = ['*'])
     {
         $query = $this->query();
 
@@ -826,7 +829,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         foreach ($compareAttributes as $column) {
-            $query->orWhere($column, 'like', '%'.join('%',str_split($text)).'%');
+            $query->orWhere($column, 'like', '%'.join('%',str_split($input)).'%');
         }
 
         return $query->get($this->selectAttributes($attributes));
