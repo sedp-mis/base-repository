@@ -99,7 +99,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function validationRules()
     {
-        return $this->validationRules ?: $this->model->rules() ?: [];
+        return $this->validationRules ?: (method_exists($this->model, 'rules') ? $this->model->rules() : []);
     }
 
     /**
