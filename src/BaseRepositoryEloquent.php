@@ -146,9 +146,10 @@ class BaseRepositoryEloquent implements RepositoryInterface
                 // with relation that is a relation name
                 if (is_array($rules) && array_key_exists('attributes', $rules)) {
                     $eagerLoads[$relation] = function ($q) use ($rules) {
-                        if (!in_array($fk = $this->model->getForeignKey(), $rules['attributes'])) {
-                            array_push($rules['attributes'], $fk);
-                        }
+                        // Disable this line, it cause errors on some cases.
+                        // if (!in_array($fk = $this->model->getForeignKey(), $rules['attributes'])) {
+                        //     array_push($rules['attributes'], $fk);
+                        // }
                         $q->select($rules['attributes']);
                     };
                 } else {
