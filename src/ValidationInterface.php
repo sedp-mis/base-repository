@@ -9,7 +9,7 @@ interface ValidationInterface
      * Throw an exception when validation fails.
      *
      * @param  \Eloquent
-     * @throws \Services\Validation\ValidationFailedException
+     * @throws \Exception
      * @return void
      */
     public function validate($model);
