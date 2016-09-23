@@ -99,7 +99,7 @@ abstract class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function validationRules()
     {
-        return $this->validationRules;
+        return $this->validationRules ?: $this->model->rules() ?: [];
     }
 
     /**
