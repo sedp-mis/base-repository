@@ -93,6 +93,19 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected $validation;
 
     /**
+     * Set the repository model.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return $this
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
      * Return the validation rules.
      *
      * @return array
