@@ -89,7 +89,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Hold the validation instance.
      *
-     * @var \Abstractions\Repository\ValidationInterface
+     * @var \SedpMis\BaseRepository\ValidationInterface
      */
     protected $validation;
 
@@ -119,7 +119,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Return the validation.
      *
-     * @return \Abstractions\Repository\ValidationInterfaced
+     * @return \SedpMis\BaseRepository\ValidationInterface
      */
     public function validation()
     {
