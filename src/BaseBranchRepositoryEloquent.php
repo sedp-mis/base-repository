@@ -13,7 +13,7 @@ class BaseBranchRepositoryEloquent extends BaseRepositoryEloquent implements Rep
     /**
      * Set the branch id to be prefixed when creating an id.
      *
-     * @param int $branchId
+     * @param  int   $branchId
      * @return $this
      */
     public function setBranchId($branchId)
@@ -26,7 +26,7 @@ class BaseBranchRepositoryEloquent extends BaseRepositoryEloquent implements Rep
     /**
      * Alias of setBranchId() method.
      *
-     * @param int $branchId
+     * @param  int   $branchId
      * @return $this
      */
     public function setBranch($branchId)
