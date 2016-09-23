@@ -16,7 +16,7 @@ class Validation implements ValidationInterface
 
     /**
      * Other validations to perform.
-     * 
+     *
      * @var array
      */
     protected $validations = [];
@@ -82,7 +82,7 @@ class Validation implements ValidationInterface
 
             foreach ($attrs as $attr) {
                 $rule = str_replace(
-                    '{'.$attr.'}', 
+                    '{'.$attr.'}',
                     // Useful for unique validation rule, which lets you check unique with exceptId parameter and
                     // other column keys combination. Example:
                     // 'name' => 'unique:parishes,name,{id},id,parish_category_id,{parish_category_id}'

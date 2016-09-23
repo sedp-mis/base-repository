@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace SedpMis\BaseRepository;
 
 use Illuminate\Support\Facades\App;
 
-abstract class RepositoryWrapper 
+abstract class RepositoryWrapper
 {
     protected $repositories;
 
@@ -32,15 +32,16 @@ abstract class RepositoryWrapper
         // Remove 'RepositoryInterface' suffix
         $className = get_class($repository);
 
-        $array = explode('\\', $className);
+        $array     = explode('\\', $className);
         $className = end($array);
 
-        return snake_case(str_replace('RepositoryEloquent', '', $className)); 
+        return snake_case(str_replace('RepositoryEloquent', '', $className));
     }
 
     public function __get($repositoryName)
     {
         $repositoryName = snake_case($repositoryName);
+
         return $this->repositories[$repositoryName];
     }
 
