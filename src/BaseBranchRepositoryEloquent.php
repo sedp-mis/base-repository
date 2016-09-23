@@ -2,7 +2,7 @@
 
 namespace SedpMis\BaseRepository;
 
-abstract class BaseBranchRepositoryEloquent extends BaseRepositoryEloquent implements RepositoryInterface
+class BaseBranchRepositoryEloquent extends BaseRepositoryEloquent implements RepositoryInterface
 {
     /**
      * Branch id to be prefix when creating new item to storage.

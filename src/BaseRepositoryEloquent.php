@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Schema;
 
-abstract class BaseRepositoryEloquent implements RepositoryInterface
+class BaseRepositoryEloquent implements RepositoryInterface
 {
     /**
      * Eloquent model.
