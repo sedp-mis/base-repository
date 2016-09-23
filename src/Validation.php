@@ -2,8 +2,8 @@
 
 namespace SedpMis\BaseRepository;
 
-use Services\Validation\ValidationFailedException;
-use Validator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Validator;
 
 class Validation implements ValidationInterface
 {
@@ -45,8 +45,8 @@ class Validation implements ValidationInterface
      * Validate model attributes before saving.
      * Throw an exception when validation fails.
      *
-     * @param  \BaseModel
-     * @throws \Services\Validation\ValidationFailedException
+     * @param  \Eloquent
+     * @throws \Exception
      * @return void
      */
     public function validate($model)
@@ -58,18 +58,18 @@ class Validation implements ValidationInterface
         $messages = [];
 
         if ($validator->fails()) {
-            $messages = $validator->messages()->all('<p>:message</p>');
+            $messages = $validator->messages()->all();
         }
 
         // Perform other validations
         foreach ($this->validations as $validationMethod) {
             if ($message = $this->{$validationMethod}($model)) {
-                $messages[] = "<p>{$message}</p>";
+                $messages[] = $message;
             }
         }
 
         if (count($messages)) {
-            throw new ValidationFailedException(join('', $messages));
+            throw App::make('sedp-mis.base-repository.validationException', $messages);
         }
     }
 

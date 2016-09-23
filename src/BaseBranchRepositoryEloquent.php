@@ -47,8 +47,8 @@ class BaseBranchRepositoryEloquent extends BaseRepositoryEloquent implements Rep
     /**
      * Override. Manipulate model before final save, setting branchId which is required for branch-inserts.
      *
-     * @param  \BaseModel $model
-     * @return \BaseModel
+     * @param  \Eloquent $model
+     * @return \Eloquent
      */
     protected function beforeSaveModel($model)
     {
