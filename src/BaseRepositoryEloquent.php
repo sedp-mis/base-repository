@@ -12,7 +12,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Eloquent model.
      *
-     * @var \BaseModel
+     * @var \Eloquent
      */
     protected $model;
 
@@ -129,7 +129,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Eagerload relations.
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\BaseModel
+     * @return \Illuminate\Database\Eloquent\Builder|\Eloquent
      */
     protected function eagerLoadRelations()
     {
@@ -198,7 +198,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      *
      * @param  mixed                                     $id
      * @param  array                                     $columns
-     * @return \Illuminate\Support\Collection|\BaseModel
+     * @return \Illuminate\Support\Collection|\Eloquent
      */
     public function find($id, $attributes = array('*'))
     {
@@ -209,7 +209,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * Get the models for the given attributes.
      *
      * @param  array           $attributes
-     * @return \BaseModel|null
+     * @return \Eloquent|null
      */
     public function findWhere(array $whereAttributes, $attributes = array('*'))
     {
@@ -221,7 +221,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      *
      * @param  mixed                                     $id
      * @param  array                                     $columns
-     * @return \Illuminate\Support\Collection|\BaseModel
+     * @return \Illuminate\Support\Collection|\Eloquent
      */
     public function findOrNew($id, $attributes = array('*'))
     {
@@ -233,7 +233,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      *
      * @param  mixed                                     $id
      * @param  array                                     $columns
-     * @return \Illuminate\Support\Collection|\BaseModel
+     * @return \Illuminate\Support\Collection|\Eloquent
      */
     public function findOrFail($id, $attributes = array('*'))
     {
@@ -244,7 +244,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * Get the first model or the first model for the given attributes.
      *
      * @param  array           $attributes
-     * @return \BaseModel|null
+     * @return \Eloquent|null
      */
     public function first(array $attributes = null)
     {
@@ -261,7 +261,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * Get the first record matching the attributes or create it.
      *
      * @param  array      $attributes
-     * @return \BaseModel
+     * @return \Eloquent
      */
     public function firstOrCreate(array $attributes)
     {
@@ -272,7 +272,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * Get the first record matching the attributes or instantiate it.
      *
      * @param  array      $attributes
-     * @return \BaseModel
+     * @return \Eloquent
      */
     public function firstOrNew(array $attributes)
     {
@@ -284,7 +284,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      *
      * @param  array                   $attributes
      * @throws \ModelNotFoundException When model not found by the given id
-     * @return \BaseModel
+     * @return \Eloquent
      */
     public function makeModel(array $attributes)
     {
@@ -315,8 +315,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Save the model or data, array or collection of the model.
      *
-     * @param  array|\BaseModel|\Illuminate\Database\Eloquent\Collection $model
-     * @return \BaseModel|\Illuminate\Database\Eloquent\Collection
+     * @param  array|\Eloquent|\Illuminate\Database\Eloquent\Collection $model
+     * @return \Eloquent|\Illuminate\Database\Eloquent\Collection
      */
     public function save($model)
     {
@@ -371,7 +371,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Save the model.
      *
-     * @param  \BaseModel $model
+     * @param  \Eloquent $model
      * @return bool
      */
     protected function saveModel($model)
@@ -395,8 +395,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Manipulate model before final save.
      *
-     * @param  \BaseModel $model
-     * @return \BaseModel
+     * @param  \Eloquent $model
+     * @return \Eloquent
      */
     protected function beforeSaveModel($model)
     {
@@ -407,7 +407,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * Create and save the model.
      *
      * @param  array                                     $attributes
-     * @return \BaseModel|\Illuminate\Support\Collection
+     * @return \Eloquent|\Illuminate\Support\Collection
      */
     public function create(array $attributes)
     {
@@ -442,7 +442,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * @param  int|null                                  $id
      * @throws \Exception                                When id is not given
      * @throws \ModelNotFoundException
-     * @return \BaseModel|\Illuminate\Support\Collection
+     * @return \Eloquent|\Illuminate\Support\Collection
      */
     public function update(array $attributes, $id = null)
     {

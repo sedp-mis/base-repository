@@ -45,7 +45,7 @@ class Validation implements ValidationInterface
      * Validate model attributes before saving.
      * Throw an exception when validation fails.
      *
-     * @param  \BaseModel
+     * @param  \Eloquent
      * @throws \Services\Validation\ValidationFailedException
      * @return void
      */
