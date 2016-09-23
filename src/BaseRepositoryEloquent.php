@@ -5,6 +5,7 @@ namespace SedpMis\BaseRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class BaseRepositoryEloquent implements RepositoryInterface
 {
@@ -146,10 +147,15 @@ class BaseRepositoryEloquent implements RepositoryInterface
                 // with relation that is a relation name
                 if (is_array($rules) && array_key_exists('attributes', $rules)) {
                     $eagerLoads[$relation] = function ($q) use ($rules) {
-                        // Disable this line, it cause errors on some cases.
-                        // if (!in_array($fk = $this->model->getForeignKey(), $rules['attributes'])) {
-                        //     array_push($rules['attributes'], $fk);
-                        // }
+                        // If query is instance of HasOneOrMany,
+                        // make sure to select the parent key name as foreign key.
+                        if (
+                            $q instanceof HasOneOrMany &&
+                            !in_array($fk = $q->getParent()->getForeignKey(), $rules['attributes'])
+                        ) {
+                            array_push($rules['attributes'], $fk);
+                        }
+
                         $q->select($rules['attributes']);
                     };
                 } else {
