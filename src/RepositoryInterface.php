@@ -16,7 +16,7 @@ interface RepositoryInterface
      * Return all models.
      *
      * @param  array                          $attributes
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function all($attributes = ['*']);
 
@@ -25,7 +25,7 @@ interface RepositoryInterface
      *
      * @param  mixed                                    $id
      * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function find($id, $attributes = ['*']);
 
@@ -42,7 +42,7 @@ interface RepositoryInterface
      *
      * @param  mixed                                    $id
      * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function findOrNew($id, $attributes = ['*']);
 
@@ -51,7 +51,7 @@ interface RepositoryInterface
      *
      * @param  mixed                                    $id
      * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function findOrFail($id, $attributes = ['*']);
 
@@ -91,7 +91,7 @@ interface RepositoryInterface
      * Create and save the model.
      *
      * @param  array                                    $attributes
-     * @return \Eloquent|\Illuminate\Support\Collection
+     * @return \Eloquent
      */
     public function create(array $attributes);
 
@@ -102,7 +102,7 @@ interface RepositoryInterface
      * @param  int|null                                 $id
      * @throws \Exception                               When id is not given
      * @throws \ModelNotFoundException
-     * @return \Eloquent|\Illuminate\Support\Collection
+     * @return \Eloquent
      */
     public function update(array $attributes, $id = null);
 
