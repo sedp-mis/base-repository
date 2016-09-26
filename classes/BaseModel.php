@@ -2,14 +2,14 @@
 
 class BaseModel extends \Illuminate\Database\Eloquent\Model
 {
-    protected static $rules = [];
+    protected $rules = [];
 
-    public static function rules($key = null)
+    public function rules($key = null)
     {
         if (is_null($key)) {
-            return static::$rules;
+            return $this->rules;
         }
 
-        return is_array($key) ? array_only(static::$rules, $key) : static::$rules[$key];
+        return is_array($key) ? array_only($this->rules, $key) : $this->rules[$key];
     }
 }
