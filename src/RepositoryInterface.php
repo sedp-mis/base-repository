@@ -15,7 +15,7 @@ interface RepositoryInterface
     /**
      * Return all models.
      *
-     * @param  array                          $attributes
+     * @param  array                                    $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function all($attributes = ['*']);
@@ -23,8 +23,8 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
+     * @param  mixed                                              $id
+     * @param  array                                              $columns
      * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function find($id, $attributes = ['*']);
@@ -40,8 +40,8 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key or return new model.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
+     * @param  mixed                                              $id
+     * @param  array                                              $columns
      * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function findOrNew($id, $attributes = ['*']);
@@ -49,8 +49,8 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
+     * @param  mixed                                              $id
+     * @param  array                                              $columns
      * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function findOrFail($id, $attributes = ['*']);
@@ -90,7 +90,7 @@ interface RepositoryInterface
     /**
      * Create and save the model.
      *
-     * @param  array                                    $attributes
+     * @param  array     $attributes
      * @return \Eloquent
      */
     public function create(array $attributes);
@@ -98,9 +98,9 @@ interface RepositoryInterface
     /**
      * Update the model attributes.
      *
-     * @param  array                                    $attributes
-     * @param  int|null                                 $id
-     * @throws \Exception                               When id is not given
+     * @param  array                   $attributes
+     * @param  int|null                $id
+     * @throws \Exception              When id is not given
      * @throws \ModelNotFoundException
      * @return \Eloquent
      */
