@@ -32,13 +32,12 @@ class BaseRepositoryEloquentTest extends TestCase
         $user = $this->repo->create([
             'username' => 'ajcastro',
             'password' => 'password',
-            'name' => 'arjon',
-            'email' => 'ajcastro29@gmail.com'
+            'name'     => 'arjon',
+            'email'    => 'ajcastro29@gmail.com',
         ]);
 
-
         $storedUser = $this->repo->find($user->id);
-        
+
         $this->assertTrue($user instanceof User);
         $this->assertTrue($storedUser instanceof User);
         $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());

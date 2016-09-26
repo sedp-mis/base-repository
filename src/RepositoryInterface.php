@@ -131,8 +131,8 @@ interface RepositoryInterface
     /**
      * Return a collection of models by paginated approach.
      *
-     * @param  int $perPage
-     * @param  int|null      $page
+     * @param  int                                      $perPage
+     * @param  int|null                                 $page
      * @param  array                                    $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */

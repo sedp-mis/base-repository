@@ -3,7 +3,7 @@
 // Sample URL
 // http://localhost:8000/api/v1/posts?relations[]=label&relations[comments][attributes][]=id&relations[comments][attributes][]=text
 
-class BaseRepositoryEloquentTest/* extends TestCase*/
+class BaseRepositoryEloquentTest /* extends TestCase*/
 {
     protected $repo;
 
@@ -21,8 +21,8 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
         $spy = $this->repo->create([
             'username' => 'ajcastro',
             'password' => 'password',
-            'name' => 'arjon',
-            'xp' => 99
+            'name'     => 'arjon',
+            'xp'       => 99,
         ]);
 
         $storedSpy = $this->repo->find($spy->id);
@@ -45,18 +45,18 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
             [
                 'username' => 'markii1607',
                 'password' => 'secret',
-                'name' => 'mark',
-                'xp' => 172
+                'name'     => 'mark',
+                'xp'       => 172,
             ], [
                 'username' => 'katbritanico',
                 'password' => 'secret',
-                'name' => 'katrina',
-                'xp' => 57
+                'name'     => 'katrina',
+                'xp'       => 57,
             ], [
                 'username' => 'janelagatuz',
                 'password' => 'secret',
-                'name' => 'janelle',
-                'xp' => 352
+                'name'     => 'janelle',
+                'xp'       => 352,
             ],
         ];
         foreach ($spies as $spy) {
@@ -70,49 +70,49 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
             [
                 'username' => 'guyabani',
                 'password' => 'secret',
-                'name' => 'giovani',
-                'xp' => 512
+                'name'     => 'giovani',
+                'xp'       => 512,
             ], [
                 'username' => 'kenn ken',
                 'password' => 'secret',
-                'name' => 'ken',
-                'xp' => 86
+                'name'     => 'ken',
+                'xp'       => 86,
             ], [
                 'username' => 'ja9',
                 'password' => 'secret',
-                'name' => 'janine',
-                'xp' => 182
+                'name'     => 'janine',
+                'xp'       => 182,
             ], [
                 'username' => 'aceruser19',
                 'password' => 'secret',
-                'name' => 'ace',
-                'xp' => 281
+                'name'     => 'ace',
+                'xp'       => 281,
             ], [
                 'username' => 'jmoane',
                 'password' => 'secret',
-                'name' => 'jessa',
-                'xp' => 41
+                'name'     => 'jessa',
+                'xp'       => 41,
             ], [
                 'username' => 'cklucido',
                 'password' => 'secret',
-                'name' => 'kaye',
-                'xp' => 145
+                'name'     => 'kaye',
+                'xp'       => 145,
             ], [
                 'username' => 'joypintor',
                 'password' => 'secret',
-                'name' => 'jazarr',
-                'xp' => 621
+                'name'     => 'jazarr',
+                'xp'       => 621,
             ], [
                 'username' => 'kharen',
                 'password' => 'secret',
-                'name' => 'karen',
-                'xp' => 91
+                'name'     => 'karen',
+                'xp'       => 91,
             ], [
                 'username' => 'tinejoy',
                 'password' => 'secret',
-                'name' => 'tine',
-                'xp' => 321
-            ]
+                'name'     => 'tine',
+                'xp'       => 321,
+            ],
         ];
         foreach ($spies as $spy) {
             $this->repo->create($spy);
@@ -125,7 +125,7 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         $attributes = [
             'username',
-            'xp'
+            'xp',
         ];
 
         $fetchSpies = $this->repo->fetch($attributes);
@@ -143,26 +143,26 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         // Test `=` with single value
         $spies = $this->repo->fetch(null, ['xp' => [
-            '=' => 352
+            '=' => 352,
         ]]);
 
         $this->assertEquals(1, $spies->count());
 
         // Test `=` with array of values
         $spies = $this->repo->fetch(null, ['xp' => [
-            '=' => [352]
+            '=' => [352],
         ]]);
 
         $this->assertEquals(1, $spies->count());
 
         $spies = $this->repo->fetch(null, ['xp' => [
-            '=' => [352, 57]
+            '=' => [352, 57],
         ]]);
 
         $this->assertEquals(2, $spies->count());
 
         $spies = $this->repo->fetch(null, ['xp' => [
-            '=' => [352, 57, 172]
+            '=' => [352, 57, 172],
         ]]);
 
         $this->assertEquals(3, $spies->count());
@@ -174,26 +174,26 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         // Test `!=` with single value
         $spies = $this->repo->fetch(null, ['xp' => [
-            '!=' => 352
+            '!=' => 352,
         ]]);
 
         $this->assertEquals(2, $spies->count());
 
         // Test `!=` with array of values
         $spies = $this->repo->fetch(null, ['xp' => [
-            '!=' => [352]
+            '!=' => [352],
         ]]);
 
         $this->assertEquals(2, $spies->count());
 
         $spies = $this->repo->fetch(null, ['xp' => [
-            '!=' => [352, 57]
+            '!=' => [352, 57],
         ]]);
 
         $this->assertEquals(1, $spies->count());
 
         $spies = $this->repo->fetch(null, ['xp' => [
-            '!=' => [352, 57, 172]
+            '!=' => [352, 57, 172],
         ]]);
 
         $this->assertEquals(0, $spies->count());
@@ -205,7 +205,7 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         // Test `>`
         $spies = $this->repo->fetch(null, ['xp' => [
-            '>' => [100]
+            '>' => [100],
         ]]);
 
         $this->assertEquals(2, $spies->count());
@@ -217,7 +217,7 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         // Test `<`
         $spies = $this->repo->fetch(null, ['xp' => [
-            '<' => [100]
+            '<' => [100],
         ]]);
 
         $this->assertEquals(1, $spies->count());
@@ -228,8 +228,8 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
         $this->seedDb();
 
         // Test `>=`
-        $spies = $this->repo->fetch(null, ['xp'=> [
-            '>=' => [180]
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '>=' => [180],
         ]]);
 
         $this->assertEquals(1, $spies->count());
@@ -238,10 +238,10 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
     public function testFetchFiltersUsingLessThanOrEqual()
     {
         $this->seedDb();
-        
+
         // Test `<=`
-        $spies = $this->repo->fetch(null, ['xp'=> [
-            '<=' => [172]
+        $spies = $this->repo->fetch(null, ['xp' => [
+            '<=' => [172],
         ]]);
 
         $this->assertEquals(2, $spies->count());
@@ -252,16 +252,16 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
         $this->seedDb();
 
         // Test for name in ascending order
-        $spies=$this->repo->fetch(null, null, [
-            'name' => 'asc'
+        $spies = $this->repo->fetch(null, null, [
+            'name' => 'asc',
         ]);
 
-        $this->assertEquals($spies->first()->name, "janelle");
-        $this->assertEquals($spies->last()->name, "mark");
+        $this->assertEquals($spies->first()->name, 'janelle');
+        $this->assertEquals($spies->last()->name, 'mark');
 
         // Test for xp in descending order
-        $spies=$this->repo->fetch(null, null, [
-            'xp' => 'desc'
+        $spies = $this->repo->fetch(null, null, [
+            'xp' => 'desc',
         ]);
 
         $this->assertEquals($spies->first()->xp, 352);
@@ -274,15 +274,15 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
             [
                 'id'   => 1,
                 'name' => 'anna',
-                'xp'   => 2
-            ],[
+                'xp'   => 2,
+            ], [
                 'id'   => 2,
                 'name' => 'anna',
-                'xp'   => 3
-            ],[
+                'xp'   => 3,
+            ], [
                 'id'   => 3,
                 'name' => 'anna',
-                'xp'   => 4
+                'xp'   => 4,
             ],
         ];
 
@@ -297,7 +297,7 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         $spies = $this->repo->fetch(null, null, [
             'name' => 'asc',
-            'xp'   => 'desc'
+            'xp'   => 'desc',
         ]);
 
         $this->assertEquals($spies->first()->id, 3);
@@ -309,25 +309,25 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
         $this->seedDb();
 
         // Test with limit of 2
-        $spies=$this->repo->fetch(null, null, null, 2);
+        $spies = $this->repo->fetch(null, null, null, 2);
 
-        $this->assertTrue(count($spies)==2, "Spies collected: ".count($spies));
+        $this->assertTrue(count($spies) == 2, 'Spies collected: '.count($spies));
 
         // Test with limit 1
-        $spies=$this->repo->fetch(null, null, null, 1);
+        $spies = $this->repo->fetch(null, null, null, 1);
 
-        $this->assertTrue(count($spies)==1, "Spies collected: ".count($spies));
+        $this->assertTrue(count($spies) == 1, 'Spies collected: '.count($spies));
 
         // Test with limit 2 offset 1
-        $spies=$this->repo->fetch(null, null, null, 2, 1);
+        $spies = $this->repo->fetch(null, null, null, 2, 1);
 
-        $this->assertTrue(count($spies)==2, "Spies collected: ".count($spies));
+        $this->assertTrue(count($spies) == 2, 'Spies collected: '.count($spies));
         $this->assertEquals($spies->first()->id, 2);
 
         // Test with limit 1 offset 2
-        $spies=$this->repo->fetch(null, null, null, 1, 2);
+        $spies = $this->repo->fetch(null, null, null, 1, 2);
 
-        $this->assertTrue(count($spies)==1, "Spies collected: ".count($spies));
+        $this->assertTrue(count($spies) == 1, 'Spies collected: '.count($spies));
         $this->assertEquals($spies->first()->id, 3);
     }
 
@@ -337,31 +337,31 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         $attributes = [
             'username',
-            'name'
+            'name',
         ];
 
         $filters = [
             'xp' => [
                 '=' => [
-                    352, 
-                    57
-                ]
-            ]
+                    352,
+                    57,
+                ],
+            ],
         ];
 
         $sort = [
-            'name' => 'desc'
+            'name' => 'desc',
         ];
 
-        $spies=$this->repo->fetch($attributes, $filters, $sort, 1, 1);
+        $spies = $this->repo->fetch($attributes, $filters, $sort, 1, 1);
 
-        $this->assertTrue(count($spies) == 1, "Spies Count: ".count($spies));
+        $this->assertTrue(count($spies) == 1, 'Spies Count: '.count($spies));
 
         foreach ($spies as $spy) {
             $this->assertEquals(array_keys($spy->getAttributes()), $attributes);
         }
 
-        $this->assertEquals($spies->first()->name, "janelle");
+        $this->assertEquals($spies->first()->name, 'janelle');
     }
 
     public function testPagination()
@@ -371,55 +371,55 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         $attributes = [
             'username',
-            'name'
+            'name',
         ];
 
         $filters = [
             'xp' => [
                 '=' => [
-                    352, 
+                    352,
                     57,
                     86,
                     145,
                     41,
                     321,
                     512,
-                    91
-                ]
-            ]
+                    91,
+                ],
+            ],
         ];
 
         $sort = [
-            'name' => 'desc'
+            'name' => 'desc',
         ];
 
         // page 1, 3 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 3, 1);
 
-        $this->assertTrue(count($spies) == 3, "Spies collected: ".count($spies));
-        $this->assertEquals($spies[0]->getAttributes()['name'], "tine");
-        $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "kaye");
+        $this->assertTrue(count($spies) == 3, 'Spies collected: '.count($spies));
+        $this->assertEquals($spies[0]->getAttributes()['name'], 'tine');
+        $this->assertEquals($spies[count($spies) - 1]->getAttributes()['name'], 'kaye');
 
         // page 3, 3 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 3, 3);
 
-        $this->assertTrue(count($spies) == 2, "Spies collected: ".count($spies));
-        $this->assertEquals($spies[0]->getAttributes()['name'], "janelle");
-        $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "giovani");
+        $this->assertTrue(count($spies) == 2, 'Spies collected: '.count($spies));
+        $this->assertEquals($spies[0]->getAttributes()['name'], 'janelle');
+        $this->assertEquals($spies[count($spies) - 1]->getAttributes()['name'], 'giovani');
 
         // page 2, 4 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 4, 2);
 
-        $this->assertTrue(count($spies) == 4, "Spies collected: ".count($spies));
-        $this->assertEquals($spies[0]->getAttributes()['name'], "karen");
-        $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "giovani");
+        $this->assertTrue(count($spies) == 4, 'Spies collected: '.count($spies));
+        $this->assertEquals($spies[0]->getAttributes()['name'], 'karen');
+        $this->assertEquals($spies[count($spies) - 1]->getAttributes()['name'], 'giovani');
 
         // page 2, 2 data per page
         $spies = $this->repo->paginate($attributes, $filters, $sort, 2, 2);
 
-        $this->assertTrue(count($spies) == 2, "Spies collected: ".count($spies));
-        $this->assertEquals($spies[0]->getAttributes()['name'], "kaye");
-        $this->assertEquals($spies[count($spies)-1]->getAttributes()['name'], "katrina");
+        $this->assertTrue(count($spies) == 2, 'Spies collected: '.count($spies));
+        $this->assertEquals($spies[0]->getAttributes()['name'], 'kaye');
+        $this->assertEquals($spies[count($spies) - 1]->getAttributes()['name'], 'katrina');
     }
 
     public function seedWithTarget()
@@ -437,7 +437,7 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         $spy = $this->repo->with('target')->first();
 
-        $this->assertTrue($spy->getRelation("target") instanceof Target);
+        $this->assertTrue($spy->getRelation('target') instanceof Target);
     }
 
     public function testShouldEagerLoadRelationsWithAttributes()
@@ -448,14 +448,14 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
             'target' => [
                 'attributes' => [
                     'id',
-                    'name'
-                ]
-            ]
+                    'name',
+                ],
+            ],
         ];
 
         $spy = $this->repo->with($relations)->first();
-        
-        $this->assertTrue($spy->getRelation("target") instanceof Target);
+
+        $this->assertTrue($spy->getRelation('target') instanceof Target);
     }
 
     public function testSearch()
@@ -470,5 +470,5 @@ class BaseRepositoryEloquentTest/* extends TestCase*/
 
         $this->assertEquals(1, $spies->count());
         $this->assertEquals('markii1607', $spies->first()->username);
-    }   
+    }
 }
