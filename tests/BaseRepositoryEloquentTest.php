@@ -34,6 +34,8 @@ class BaseRepositoryEloquentTest extends TestCase
             'password' => 'password',
             'name'     => 'arjon',
             'email'    => 'ajcastro29@gmail.com',
+            'password' => '12345',
+            'password' => '12347',
         ]);
 
         $storedUser = $this->repo->find($user->id);
