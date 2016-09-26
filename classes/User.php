@@ -6,8 +6,7 @@ class User extends BaseModel
     protected $fillable = ['username', 'name', 'email'];
 
     protected $rules = array(
-        'fname'                 => 'required|alpha|min:2',
-        'lname'                 => 'required|alpha|min:2',
+        'name'                  => 'required|alpha|min:2',
         'username'              => 'required|unique:users',
         'email'                 => 'required|email',
         'password'              => 'required|alpha_num|between:6,12|confirmed',
