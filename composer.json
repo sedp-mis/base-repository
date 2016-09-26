@@ -31,7 +31,7 @@
     },
     "autoload-dev": {
         "classmap": [
-            "test_classes/"
+            "classes/"
         ]
     },
     "minimum-stability": "stable"
