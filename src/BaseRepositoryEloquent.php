@@ -331,7 +331,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
                 array_is_assoc($first)
             )
         ) {
-            return $this->saveCollection($model);
+            return $this->saveMany($model);
         }
 
         /*
@@ -356,7 +356,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * @param  array|\Illuminate\Support\Collection $models
      * @return \Illuminate\Support\Collection
      */
-    public function saveCollection($models)
+    public function saveMany($models)
     {
         // Convert to collection if array
         $models = is_array($models) ? collection($models) : $models;
@@ -666,19 +666,20 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Return a collection of models base from the attribute filters and by paginated approach.
+     * Return a collection of models by paginated approach.
      *
-     * @deprecated Use builder pattern, get() method
-     * @param  array    $attributes
-     * @param  array    $fiters
-     * @param  array    $sort
-     * @param  int|null $perPage
-     * @param  int      $page
-     * @return array
+     * @param  int                                      $perPage
+     * @param  int|null                                 $page
+     * @param  array                                    $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1)
+    public function paginate($perPage = 15, $page = null, $attributes = ['*'])
     {
-        return $this->fetch($attributes, $filters, $sort, $perPage, ($page - 1) * $perPage);
+        $pagelo = new PageLimitOffset($perPage, $page);
+
+        return $this->limit($pagelo->limit())
+            ->offset($pagelo->offset())
+            ->get($attributes);
     }
 
     /**

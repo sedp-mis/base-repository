@@ -15,17 +15,17 @@ interface RepositoryInterface
     /**
      * Return all models.
      *
-     * @param  array                          $attributes
-     * @return \Illuminate\Support\Collection
+     * @param  array                                    $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function all($attributes = ['*']);
 
     /**
      * Find a model by its primary key.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @param  mixed                                              $id
+     * @param  array                                              $columns
+     * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function find($id, $attributes = ['*']);
 
@@ -40,18 +40,18 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key or return new model.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @param  mixed                                              $id
+     * @param  array                                              $columns
+     * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function findOrNew($id, $attributes = ['*']);
 
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @param  mixed                                              $id
+     * @param  array                                              $columns
+     * @return \Illuminate\Database\Eloquent\Collection|\Eloquent
      */
     public function findOrFail($id, $attributes = ['*']);
 
@@ -90,19 +90,19 @@ interface RepositoryInterface
     /**
      * Create and save the model.
      *
-     * @param  array                                    $attributes
-     * @return \Eloquent|\Illuminate\Support\Collection
+     * @param  array     $attributes
+     * @return \Eloquent
      */
     public function create(array $attributes);
 
     /**
      * Update the model attributes.
      *
-     * @param  array                                    $attributes
-     * @param  int|null                                 $id
-     * @throws \Exception                               When id is not given
+     * @param  array                   $attributes
+     * @param  int|null                $id
+     * @throws \Exception              When id is not given
      * @throws \ModelNotFoundException
-     * @return \Eloquent|\Illuminate\Support\Collection
+     * @return \Eloquent
      */
     public function update(array $attributes, $id = null);
 
@@ -129,30 +129,14 @@ interface RepositoryInterface
     public function has($relation, $operator = '>=', $count = 1);
 
     /**
-     * Fetching eloquent models with filtering, sorting and limit-offset.
+     * Return a collection of models by paginated approach.
      *
-     * @deprecated Use builder pattern, get() method
-     * @param  array    $attributes
-     * @param  array    $fiters
-     * @param  array    $sort
-     * @param  int|null $limit
-     * @param  int      $offset
-     * @return array
+     * @param  int                                      $perPage
+     * @param  int|null                                 $page
+     * @param  array                                    $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $skip = 0);
-
-    /**
-     * Return a collection of models base from the attribute filters and by paginated approach.
-     *
-     * @deprecated Use builder pattern, get() method
-     * @param  array    $attributes
-     * @param  array    $fiters
-     * @param  array    $sort
-     * @param  int|null $perPage
-     * @param  int      $page
-     * @return array
-     */
-    public function paginate($attributes = ['*'], $filters = [], $sort = [], $perPage = null, $page = 1);
+    public function paginate($perPage = 15, $page = null, $attributes = ['*']);
 
     /**
      * Set attributes to be selected.
