@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTargetsTable extends Migration {
+class CreateUsersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,14 +12,13 @@ class CreateTargetsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('targets', function(Blueprint $table)
+		Schema::create('users', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->unsignedInteger('spy_id')->nullable();
+			$table->string('username');
 			$table->string('name');
+			$table->string('email');
 			$table->timestamps();
-
-			$table->foreign('spy_id')->references('id')->on('spies');
 		});
 	}
 
@@ -31,7 +30,6 @@ class CreateTargetsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('targets');
+		Schema::drop('users');
 	}
-
 }
