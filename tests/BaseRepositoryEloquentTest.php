@@ -27,15 +27,30 @@ class BaseRepositoryEloquentTest extends TestCase
         DB::rollback();
     }
 
-    public function testShouldCreateStoreFindUpdateAndDeleteModel()
+    /**
+     * @expectedException \ValidationException
+     */
+    public function testShouldFailWhenPasswordDidNotMatch()
     {
         $user = $this->repo->create([
-            'username' => 'ajcastro',
-            'password' => 'password',
-            'name'     => 'arjon',
-            'email'    => 'ajcastro29@gmail.com',
-            'password' => '12345',
-            'password' => '12347',
+            'username'              => 'ajcastro',
+            'password'              => 'password',
+            'name'                  => 'arjon',
+            'email'                 => 'ajcastro29@gmail.com',
+            'password'              => '123456',
+            'password_confirmation' => '123459',
+        ]);
+    }
+
+    public function testShouldCreateUser()
+    {
+        $user = $this->repo->create([
+            'username'              => 'ajcastro',
+            'password'              => 'password',
+            'name'                  => 'arjon',
+            'email'                 => 'ajcastro29@gmail.com',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
         ]);
 
         $storedUser = $this->repo->find($user->id);
@@ -43,16 +58,5 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertTrue($user instanceof User);
         $this->assertTrue($storedUser instanceof User);
         $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());
-
-        $storedUser->name = 'ajcastro';
-
-        $this->repo->update(['name' => $storedUser->name], $storedUser->id);
-
-        $updatedUser = $this->repo->find($storedUser->id);
-        $this->assertEquals($updatedUser->getAttributes(), $storedUser->getAttributes());
-
-        $this->repo->delete($user);
-
-        $this->assertEquals(0, User::count());
     }
 }
