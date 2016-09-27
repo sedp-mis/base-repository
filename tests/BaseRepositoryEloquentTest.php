@@ -75,4 +75,26 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertEquals('arjon', User::findOrFail($user->id)->name);
         $this->assertTrue($updatedUser instanceof User);
     }
+
+    public function testShouldCreateUserWithoutValidation()
+    {
+        $model = new User;
+        $model->setRules([]);
+        $repo = (new BaseRepositoryEloquent)->setModel($model);
+
+        $user = $repo->create([
+            'username'              => 'ajcastro',
+            'password'              => 'password',
+            'name'                  => 'arjon',
+            'email'                 => 'ajcastro29@gmail.com',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
+        ]);
+
+        $storedUser = User::find($user->id);
+        $this->assertTrue($user instanceof User);
+        $this->assertTrue($user->exists);
+        $this->assertTrue($storedUser instanceof User);
+        $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());
+    }
 }
