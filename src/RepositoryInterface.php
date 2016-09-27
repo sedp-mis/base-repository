@@ -82,7 +82,7 @@ interface RepositoryInterface
     public function firstOrNew(array $attributes);
 
     /**
-     * Create and save a new model or models.
+     * Create and store a new model.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -90,23 +90,47 @@ interface RepositoryInterface
     public function create(array $attributes);
 
     /**
-     * Update the model or models attributes.
+     * Create and store multiple new models.
      *
-     * @param  array  $attributes
+     * @param  array  $items
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function createMany(array $items);
+
+    /**
+     * Update the model attributes in the storage.
+     *
      * @param  int|null  $id
+     * @param  array  $attributes
      * @throws \Exception  When id is not given
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function update(array $attributes, $id = null);
+    public function update($id, array $attributes);
 
     /**
-     * Save the model or models.
+     * Update multiple models attributes in the storage.
      *
-     * @param  \Illuminate\DatabaseEloquent\Model|\Illuminate\DatabaseEloquent\Collection|array  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  array  $items
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function updateMany(array $items);
+
+    /**
+     * Save the model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
      */
     public function save($model);
+
+    /**
+     * Save multiple models.
+     *
+     * @param  array|\Illuminate\Database\Eloquent\Collection  $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function saveMany($models);
 
     /**
      * Delete a model by the following:

@@ -2,10 +2,11 @@
 
 namespace SedpMis\BaseRepository;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class BaseRepositoryEloquent implements RepositoryInterface
 {
@@ -253,26 +254,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Make a new instance of the model from the attributes.
-     *
-     * @param  array                   $attributes
-     * @throws \ModelNotFoundException When model not found by the given id
-     * @return\Illuminate\Database\Eloquent\Model
-     */
-    public function makeModel(array $attributes)
-    {
-        $model = $this->model->newInstance($attributes);
-
-        if ($this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
-            $model = $this->model->findOrFail($id = $attributes[$pk], array_merge([$pk], $this->filterFillables(array_keys($attributes))));
-
-            $model->fill($attributes);
-        }
-
-        return $model;
-    }
-
-    /**
      * Filter fillable attributes of a model.
      *
      * @param  array $attributes
@@ -296,31 +277,22 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Create and save a new model or models.
+     * Create and store a new model.
      *
      * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function create(array $attributes)
     {
         /*
-         * Polymorphic to handle multiple array of attributes
+         * Check if is single associate array item.
          */
         if (array_is_assoc(head($attributes))) {
-            $arrayAttributes = $attributes;
-            $models          = collection();
-            foreach ($arrayAttributes as $attributes) {
-                $models[] = $this->create($attributes);
-            }
-
-            return $models;
+            throw new InvalidArgumentException("Trying to pass multiple items in create() method. Please use createMany() instead.");
         }
 
-        /*
-         * Main logic handling create on single array
-         */
         // Unset primary key when $updateWhenIdExists is true, to make sure to create new record in database.
-        if (is_array($attributes) && array_is_assoc($attributes) && $this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
+        if (array_is_assoc($attributes) && $this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
             unset($attributes[$pk]);
         }
 
@@ -330,42 +302,35 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Update the model or models attributes.
+     * Create and store multiple new models.
      *
-     * @param  array  $attributes
+     * @param  array  $items
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function createMany(array $items)
+    {
+        $models = collection();
+
+        foreach ($items as $item) {
+            $models[] = $this->create($item);
+        }
+
+        return $models;
+    }
+
+    /** Update the model or models attributes.
+     *
      * @param  int|null  $id
+     * @param  array  $attributes
      * @throws \Exception  When id is not given
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function update(array $attributes, $id = null)
+    public function update($id, array $attributes)
     {
-        /*
-         * Polymorphic to handle multiple array of attributes
-         */
-        if (array_is_assoc(head($attributes))) {
-            $arrayAttributes = $attributes;
-            $models          = collection();
-            foreach ($arrayAttributes as $attributes) {
-                $models[] = $this->update($attributes);
-            }
-
-            return $models;
-        }
-
-        /*
-         * Main logic handling of update on single array
-         */
-        $id = $id ?: $this->getIdFromAttributes($attributes);
-
-        if (is_null($id)) {
-            throw new \Exception("The `{$this->model->getKeyName()}` does not exist from the given attributes, cannot update {$this->model->getClass()}. ".
-                'Attributes: '.json_encode($attributes));
-        }
+        $model = $this->model->findOrFail($id);
 
         $this->validation()->validate('update', array_merge($attributes, [$this->model->getKeyName() => $id]));
-
-        $model = $this->model->findOrFail($id);
 
         $model->fill($attributes);
 
@@ -375,48 +340,58 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Save the model or models.
+     * Update multiple models attributes in the storage.
      *
-     * @param  \Illuminate\DatabaseEloquent\Model|\Illuminate\DatabaseEloquent\Collection|array  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  array  $items
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function save($model)
+    public function updateMany(array $items)
     {
-        /*
-         * Polymorphic to handle collection or array of models
-         */
-        if (
-            $model instanceof Collection ||
-            is_array($model) &&
-            (
-                ($first = head($model)) instanceof Model ||
-                array_is_assoc($first)
-            )
-        ) {
-            return $this->saveMany($model);
+        $ids = array_pluck($items, $this->model->getKeyName());
+        $models = $this->model->find($ids);
+
+        foreach ($models as $model) {
+            $attributes = array_first($items, function ($i, $attributes) use ($model) {
+                if (!array_key_exists($model->getKeyName(), $attributes)) {
+                    return false;
+                }
+
+                return $attributes[$model->getKeyName()] == $model->getKey();
+            });
+
+            $this->validation()->validate('update', array_merge($attributes, [$model->getKeyName() => $model->getKey()]));
+
+            $model->fill($attributes);
+            $model->save();
         }
 
-        /*
-         * Main logic of handling save on single model
-         */
-        if (is_array($model) && array_is_assoc($model)) {
-            $model = $this->makeModel($model);
-        }
-
-        if (!$this->validation()->isEmpty()) {
-            $this->validation()->validate($model);
-        }
-
-        $this->saveModel($model);
-
-        return $model;
+        return $models;
     }
 
     /**
-     * Save collection or array of models.
+     * Save the model.
      *
-     * @param  array|\Illuminate\Support\Collection $models
-     * @return \Illuminate\Support\Collection
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
+     */
+    public function save($model)
+    {
+        if ($model instanceof Collection || is_array($model)) {
+            throw new InvalidArgumentException('Parameter $model must be an instance of \Illuminate\Database\Eloquent\Model');
+        }
+
+        $this->validation()->validate('save', $model->getAttributes());
+
+        $this->beforeSaveModel($model);
+
+        return $model->save();
+    }
+
+    /**
+     * Save multiple models.
+     *
+     * @param  array|\Illuminate\Database\Eloquent\Collection  $models
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function saveMany($models)
     {
@@ -431,30 +406,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Save the model.
-     *
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @return bool
-     */
-    protected function saveModel($model)
-    {
-        // Run some manipulation before saving model.
-        $this->beforeSaveModel($model);
-
-        $saved = $model->save();
-
-        if (!$this->isSaveRecursive) {
-            return $saved;
-        }
-
-        foreach ($model->getRelations() as $relation) {
-            $saved = $this->saveModel($relation);
-        }
-
-        return $saved;
-    }
-
-    /**
      * Manipulate model before final save.
      *
      * @param \Illuminate\Database\Eloquent\Model $model
@@ -463,19 +414,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected function beforeSaveModel($model)
     {
         return $model;
-    }
-
-    /**
-     * Get the id from attributes.
-     *
-     * @param  array $attributes
-     * @return int
-     */
-    public function getIdFromAttributes(array $attributes)
-    {
-        if (array_key_exists($keyName = $this->model->getKeyName(), $attributes) && !empty($attributes[$keyName])) {
-            return $attributes[$keyName];
-        }
     }
 
     /**

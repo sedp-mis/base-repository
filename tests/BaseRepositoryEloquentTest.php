@@ -70,7 +70,7 @@ class BaseRepositoryEloquentTest extends TestCase
             'password' => '123456',
         ]);
 
-        $updatedUser = $this->repo->update(['name' => 'arjon'], $user->id);
+        $updatedUser = $this->repo->update($user->id, ['name' => 'arjon']);
 
         $this->assertEquals('arjon', User::findOrFail($user->id)->name);
         $this->assertTrue($updatedUser instanceof User);
