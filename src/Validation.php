@@ -36,19 +36,19 @@ class Validation implements ValidationInterface
      * Throw an exception when validation fails.
      *
      * @param  string  $operation
-     * @param  array|\Illuminate\Database\Eloquent\Model $model
+     * @param  array|\Illuminate\Database\Eloquent\Model $attributes
      * @throws \Exception
      * @return void
      */
-    public function validate($operation, $model)
+    public function validate($operation, $attributes)
     {
-        $model = is_array($model) ? $model : $model->getAttributes();
+        $attributes = is_array($attributes) ? $attributes : $attributes->getAttributes();
 
-        $rules = $this->model->rules($operation == 'update' ? array_keys($model) : null, $operation);
+        $rules = $this->model->rules($operation == 'update' ? array_keys($attributes) : null, $operation);
 
-        $rules = $this->interpolateValidationRules($rules, $model);
+        $rules = $this->interpolateValidationRules($rules, $attributes);
 
-        $validator = Validator::make($model, $rules);
+        $validator = Validator::make($attributes, $rules);
 
         $messages = [];
 
@@ -58,7 +58,7 @@ class Validation implements ValidationInterface
 
         // Perform other validations
         foreach ($this->validations as $validationMethod) {
-            if ($message = $this->{$validationMethod}($model)) {
+            if ($message = $this->{$validationMethod}($attributes)) {
                 $messages[] = $message;
             }
         }
@@ -72,10 +72,10 @@ class Validation implements ValidationInterface
      * Interpolate model attribute values on validation rules.
      *
      * @param  array $rules
-     * @param  array $model
+     * @param  array $attributes
      * @return array
      */
-    protected function interpolateValidationRules($rules, $model)
+    protected function interpolateValidationRules($rules, $attributes)
     {
         foreach ($rules as &$rule) {
             $attrs = last(chars_within($rule, ['{', '}']));
@@ -86,7 +86,7 @@ class Validation implements ValidationInterface
                     // Useful for unique validation rule, which lets you check unique with exceptId parameter and
                     // other column keys combination. Example:
                     // 'name' => 'unique:parishes,name,{id},id,parish_category_id,{parish_category_id}'
-                    is_null($model[$attr]) && $attr == $this->model->getKeyName() ? 'NULL' : $model[$attr],
+                    is_null($attributes[$attr]) && $attr == $this->model->getKeyName() ? 'NULL' : $attributes[$attr],
                     $rule
                 );
             }

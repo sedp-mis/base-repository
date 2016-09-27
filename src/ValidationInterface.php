@@ -9,9 +9,9 @@ interface ValidationInterface
      * Throw an exception when validation fails.
      *
      * @param  string  $operation
-     * @param  array|\Illuminate\Database\Eloquent\Model $model
+     * @param  array|\Illuminate\Database\Eloquent\Model $attributes
      * @throws \Exception
      * @return void
      */
-    public function validate($operation, $model);
+    public function validate($operation, $attributes);
 }
