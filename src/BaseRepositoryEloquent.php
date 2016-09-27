@@ -80,13 +80,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected $isSaveRecursive = false;
 
     /**
-     * Validation rules before saving model.
-     *
-     * @var array
-     */
-    protected $validationRules = [];
-
-    /**
      * Hold the validation instance.
      *
      * @var \SedpMis\BaseRepository\ValidationInterface
@@ -104,26 +97,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
         $this->model = $model;
 
         return $this;
-    }
-
-    /**
-     * Return the validation rules.
-     *
-     * @return array
-     */
-    public function validationRules()
-    {
-        return $this->validationRules ?: (method_exists($this->model, 'rules') ? $this->model->rules() : []);
-    }
-
-    /**
-     * Return the validation.
-     *
-     * @return \SedpMis\BaseRepository\ValidationInterface
-     */
-    public function validation()
-    {
-        return $this->validation ?: $this->validation = new Validation($this->validationRules());
     }
 
     /**
@@ -313,6 +286,16 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
+     * Return the validation.
+     *
+     * @return \SedpMis\BaseRepository\ValidationInterface
+     */
+    public function validation()
+    {
+        return $this->validation ?: $this->validation = new Validation($this->model);
+    }
+
+    /**
      * Create and save a new model or models.
      *
      * @param  array  $attributes
@@ -341,9 +324,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
             unset($attributes[$pk]);
         }
 
+        $this->validation()->validate('create', $attributes);
 
-
-        return $this->save($attributes);
+        return $this->model->create($attributes);
     }
 
     /**
