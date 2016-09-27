@@ -2,8 +2,6 @@
 
 namespace SedpMis\BaseRepository;
 
-use Illuminate\Database\Eloquent\Model;
-
 interface RepositoryInterface
 {
     /**
