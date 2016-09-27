@@ -624,33 +624,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Fetching eloquent models with filtering, sorting and limit-offset.
-     *
-     * @deprecated Use builder pattern, get() method
-     * @param  array    $attributes
-     * @param  array    $fiters
-     * @param  array    $sort
-     * @param  int|null $limit
-     * @param  int      $offset
-     * @return array
-     */
-    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
-    {
-        $query = $this->eagerLoadRelations();
-
-        //filters
-        $this->queryFilters($query, $filters);
-
-        //sort
-        $this->querySort($query, $sort);
-
-        //limit and offset
-        $this->queryLimitOffset($query, $limit, $offset);
-
-        return $query->get($attributes ?: ['*']);
-    }
-
-    /**
      * Return a collection of models by paginated approach.
      *
      * @param  int                                      $perPage
@@ -777,13 +750,13 @@ class BaseRepositoryEloquent implements RepositoryInterface
         // has relations
         $this->queryHasRelations($query);
 
-        //filters
+        // filters
         $this->queryFilters($query);
 
-        //sort
+        // sort
         $this->querySort($query);
 
-        //limit and offset
+        // limit and offset
         $this->queryLimitOffset($query);
 
         return $query;
