@@ -25,8 +25,8 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key.
      *
-     * @param  mixed                                              $id
-     * @param  array                                              $columns
+     * @param  mixed                                            $id
+     * @param  array                                            $columns
      * @return \Illuminate\Database\Eloquent\[Model|Collection]
      */
     public function find($id, $attributes = ['*']);
@@ -34,7 +34,7 @@ interface RepositoryInterface
     /**
      * Get the models for the given attributes.
      *
-     * @param  array          $attributes
+     * @param  array                                    $attributes
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function findWhere(array $whereAttributes, $attributes = ['*']);
@@ -42,8 +42,8 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key or return new model.
      *
-     * @param  mixed                                              $id
-     * @param  array                                              $columns
+     * @param  mixed                                            $id
+     * @param  array                                            $columns
      * @return \Illuminate\Database\Eloquent\[Model|Collection]
      */
     public function findOrNew($id, $attributes = ['*']);
@@ -51,8 +51,8 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @param  mixed                                              $id
-     * @param  array                                              $columns
+     * @param  mixed                                            $id
+     * @param  array                                            $columns
      * @return \Illuminate\Database\Eloquent\[Model|Collection]
      */
     public function findOrFail($id, $attributes = ['*']);
@@ -60,7 +60,7 @@ interface RepositoryInterface
     /**
      * Get the first model or the first model for the given attributes.
      *
-     * @param  array          $attributes
+     * @param  array                                    $attributes
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function first(array $attributes = null);
@@ -68,7 +68,7 @@ interface RepositoryInterface
     /**
      * Get the first record matching the attributes or create it.
      *
-     * @param  array     $attributes
+     * @param  array                               $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrCreate(array $attributes);
@@ -76,7 +76,7 @@ interface RepositoryInterface
     /**
      * Get the first record matching the attributes or instantiate it.
      *
-     * @param  array     $attributes
+     * @param  array                               $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrNew(array $attributes);
@@ -84,7 +84,7 @@ interface RepositoryInterface
     /**
      * Create and save a new model.
      *
-     * @param  array     $attributes
+     * @param  array                               $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function create(array $attributes);
@@ -92,9 +92,9 @@ interface RepositoryInterface
     /**
      * Update the model attributes.
      *
-     * @param  array                   $attributes
-     * @param  int|null                $id
-     * @throws \Exception              When id is not given
+     * @param  array                                                $attributes
+     * @param  int|null                                             $id
+     * @throws \Exception                                           When id is not given
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -103,7 +103,7 @@ interface RepositoryInterface
     /**
      * Save the model.
      *
-     * @param  \Eloquent $model
+     * @param  \Illuminate\Database\Eloquent\Model $model
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function save(Model $model);
