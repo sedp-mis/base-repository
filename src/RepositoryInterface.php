@@ -82,7 +82,7 @@ interface RepositoryInterface
     public function firstOrNew(array $attributes);
 
     /**
-     * Create and save a new model.
+     * Create and save a new model or models.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -90,7 +90,7 @@ interface RepositoryInterface
     public function create(array $attributes);
 
     /**
-     * Update the model attributes.
+     * Update the model or models attributes.
      *
      * @param  array  $attributes
      * @param  int|null  $id
@@ -101,12 +101,12 @@ interface RepositoryInterface
     public function update(array $attributes, $id = null);
 
     /**
-     * Save the model.
+     * Save the model or models.
      *
-     * @param  \Illuminate\Database Eloquent\Model  $model
+     * @param  \Illuminate\DatabaseEloquent\Model|\Illuminate\DatabaseEloquent\Collection|array  $model
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function save(Model $model);
+    public function save($model);
 
     /**
      * Delete a model by the following:
