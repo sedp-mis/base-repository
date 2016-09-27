@@ -76,6 +76,22 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->assertTrue($updatedUser instanceof User);
     }
 
+    public function testShouldUpdateUserWithUniqueUsername()
+    {
+        $user = User::create([
+            'username' => 'ajcastro',
+            'password' => 'password',
+            'name'     => 'arjon',
+            'email'    => 'ajcastro29@gmail.com',
+            'password' => '123456',
+        ]);
+
+        $updatedUser = $this->repo->update($user->id, ['username' => 'ajcastro29']);
+
+        $this->assertEquals($updatedUser->getAttributes(), User::findOrFail($user->id)->getAttributes());
+        $this->assertTrue($updatedUser instanceof User);
+    }
+
     public function testShouldCreateUserWithoutValidation()
     {
         $model = new User;
