@@ -313,6 +313,87 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
+     * Create and save a new model or models.
+     *
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
+     */
+    public function create(array $attributes)
+    {
+        /*
+         * Polymorphic to handle multiple array of attributes
+         */
+        if (array_is_assoc(head($attributes))) {
+            $arrayAttributes = $attributes;
+            $models          = collection();
+            foreach ($arrayAttributes as $attributes) {
+                $models[] = $this->create($attributes);
+            }
+
+            return $models;
+        }
+
+        /*
+         * Main logic handling create on single array
+         */
+        // Unset primary key when $updateWhenIdExists is true, to make sure to create new record in database.
+        if (is_array($attributes) && array_is_assoc($attributes) && $this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
+            unset($attributes[$pk]);
+        }
+
+
+
+        return $this->save($attributes);
+    }
+
+    /**
+     * Update the model or models attributes.
+     *
+     * @param  array  $attributes
+     * @param  int|null  $id
+     * @throws \Exception  When id is not given
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function update(array $attributes, $id = null)
+    {
+        /*
+         * Polymorphic to handle multiple array of attributes
+         */
+        if (array_is_assoc(head($attributes))) {
+            $arrayAttributes = $attributes;
+            $models          = collection();
+            foreach ($arrayAttributes as $attributes) {
+                $models[] = $this->update($attributes);
+            }
+
+            return $models;
+        }
+
+        /*
+         * Main logic handling of update on single array
+         */
+        $id = $id ?: $this->getIdFromAttributes($attributes);
+
+        if (is_null($id)) {
+            throw new \Exception("The `{$this->model->getKeyName()}` does not exist from the given attributes, cannot update {$this->model->getClass()}. ".
+                'Attributes: '.json_encode($attributes));
+        }
+
+        $model = $this->model->findOrFail($id);
+
+        if ($model instanceof Collection) {
+            $model->each(function ($model) use ($attributes) {
+                $model->fill($attributes);
+            });
+        } else {
+            $model->fill($attributes);
+        }
+
+        return $this->save($model);
+    }
+
+    /**
      * Save the model or models.
      *
      * @param  \Illuminate\DatabaseEloquent\Model|\Illuminate\DatabaseEloquent\Collection|array  $model
@@ -401,85 +482,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected function beforeSaveModel($model)
     {
         return $model;
-    }
-
-    /**
-     * Create and save a new model or models.
-     *
-     * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function create(array $attributes)
-    {
-        /*
-         * Polymorphic to handle multiple array of attributes
-         */
-        if (array_is_assoc(head($attributes))) {
-            $arrayAttributes = $attributes;
-            $models          = collection();
-            foreach ($arrayAttributes as $attributes) {
-                $models[] = $this->create($attributes);
-            }
-
-            return $models;
-        }
-
-        /*
-         * Main logic handling create on single array
-         */
-        // Unset primary key when $updateWhenIdExists is true, to make sure to create new record in database.
-        if (is_array($attributes) && array_is_assoc($attributes) && $this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
-            unset($attributes[$pk]);
-        }
-
-        return $this->save($attributes);
-    }
-
-    /**
-     * Update the model or models attributes.
-     *
-     * @param  array  $attributes
-     * @param  int|null  $id
-     * @throws \Exception  When id is not given
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function update(array $attributes, $id = null)
-    {
-        /*
-         * Polymorphic to handle multiple array of attributes
-         */
-        if (array_is_assoc(head($attributes))) {
-            $arrayAttributes = $attributes;
-            $models          = collection();
-            foreach ($arrayAttributes as $attributes) {
-                $models[] = $this->update($attributes);
-            }
-
-            return $models;
-        }
-
-        /*
-         * Main logic handling of update on single array
-         */
-        $id = $id ?: $this->getIdFromAttributes($attributes);
-
-        if (is_null($id)) {
-            throw new \Exception("The `{$this->model->getKeyName()}` does not exist from the given attributes, cannot update {$this->model->getClass()}. ".
-                'Attributes: '.json_encode($attributes));
-        }
-
-        $model = $this->model->findOrFail($id);
-
-        if ($model instanceof Collection) {
-            $model->each(function ($model) use ($attributes) {
-                $model->fill($attributes);
-            });
-        } else {
-            $model->fill($attributes);
-        }
-
-        return $this->save($model);
     }
 
     /**
