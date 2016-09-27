@@ -163,7 +163,7 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->repo->create([
             [
                 'username' => 'user1',
-            ],[
+            ], [
                 'username' => 'user2',
             ],
         ]);
@@ -177,7 +177,7 @@ class BaseRepositoryEloquentTest extends TestCase
         $this->repo->save([
             [
                 'username' => 'user1',
-            ],[
+            ], [
                 'username' => 'user2',
             ],
         ]);
