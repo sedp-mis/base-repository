@@ -53,10 +53,26 @@ class BaseRepositoryEloquentTest extends TestCase
             'password_confirmation' => '123456',
         ]);
 
-        $storedUser = $this->repo->find($user->id);
+        $storedUser = User::findOrFail($user->id);
 
         $this->assertTrue($user instanceof User);
         $this->assertTrue($storedUser instanceof User);
         $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());
+    }
+
+    public function testShouldUpdateUser()
+    {
+        $user = User::create([
+            'username' => 'ajcastro',
+            'password' => 'password',
+            'name'     => 'arjon_x',
+            'email'    => 'ajcastro29@gmail.com',
+            'password' => '123456',
+        ]);
+
+        $updatedUser = $this->repo->update(['name' => 'arjon'], $user->id);
+
+        $this->assertEquals('arjon', User::findOrFail($user->id)->name);
+        $this->assertTrue($updatedUser instanceof User);
     }
 }

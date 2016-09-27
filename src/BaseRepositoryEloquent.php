@@ -363,17 +363,15 @@ class BaseRepositoryEloquent implements RepositoryInterface
                 'Attributes: '.json_encode($attributes));
         }
 
+        $this->validation()->validate('update', array_merge($attributes, [$this->model->getKeyName() => $id]));
+
         $model = $this->model->findOrFail($id);
 
-        if ($model instanceof Collection) {
-            $model->each(function ($model) use ($attributes) {
-                $model->fill($attributes);
-            });
-        } else {
-            $model->fill($attributes);
-        }
+        $model->fill($attributes);
 
-        return $this->save($model);
+        $model->save();
+
+        return $model;
     }
 
     /**
