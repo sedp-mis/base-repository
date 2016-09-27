@@ -302,6 +302,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
 
         $this->beforeSaveModel($model);
 
+        $model->save();
+
         return $model;
     }
 

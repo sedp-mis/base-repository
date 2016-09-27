@@ -53,9 +53,9 @@ class BaseRepositoryEloquentTest extends TestCase
             'password_confirmation' => '123456',
         ]);
 
-        $storedUser = User::findOrFail($user->id);
-
+        $storedUser = User::find($user->id);
         $this->assertTrue($user instanceof User);
+        $this->assertTrue($user->exists);
         $this->assertTrue($storedUser instanceof User);
         $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());
     }
