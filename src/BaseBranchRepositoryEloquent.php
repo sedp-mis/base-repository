@@ -46,7 +46,7 @@ class BaseBranchRepositoryEloquent extends BaseRepositoryEloquent implements Rep
 
     /**
      * Override.
-     * Manipulate model before final save. 
+     * Manipulate model before final save.
      * Setting branchId which is required for branch-inserts.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model
