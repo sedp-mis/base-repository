@@ -298,7 +298,11 @@ class BaseRepositoryEloquent implements RepositoryInterface
 
         $this->validation()->validate('create', $attributes);
 
-        return $this->model->create($attributes);
+        $model = $this->model->newInstance($attributes);
+
+        $this->beforeSaveModel($model);
+
+        return $model;
     }
 
     /**
