@@ -53,10 +53,10 @@ trait ValidatingTrait
         $rules = $this->{$ruleName}();
 
         if (is_null($key)) {
-            return $this->rules;
+            return $rules;
         }
 
-        return is_array($key) ? array_only($this->rules, $key) : $this->rules[$key];
+        return is_array($key) ? array_only($rules, $key) : $rules[$key];
     }
 
     /**
