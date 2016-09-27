@@ -374,7 +374,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
             throw new InvalidArgumentException('Parameter $model must be an instance of \Illuminate\Database\Eloquent\Model');
         }
 
-        $this->validation()->validate('save', $model->getAttributes());
+        $this->validation()->validate($model->exists ? 'update' : 'create', $model->getDirty());
 
         $this->beforeSaveModel($model);
 
