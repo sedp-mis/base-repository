@@ -154,4 +154,32 @@ class BaseRepositoryEloquentTest extends TestCase
 
         $this->assertEquals(User::find($user->id)->getAttributes(), $user->getAttributes());
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testShouldFailWhenTryToPassMultipleItemsOnCreate()
+    {
+        $this->repo->create([
+            [
+                'username' => 'user1',
+            ],[
+                'username' => 'user2',
+            ],
+        ]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testShouldFailWhenTryToPassMultipleItemsOnSave()
+    {
+        $this->repo->save([
+            [
+                'username' => 'user1',
+            ],[
+                'username' => 'user2',
+            ],
+        ]);
+    }
 }
