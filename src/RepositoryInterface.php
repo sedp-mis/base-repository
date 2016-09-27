@@ -9,7 +9,7 @@ interface RepositoryInterface
     /**
      * Set eagerload relations.
      *
-     * @param  array $relations
+     * @param  array  $relations
      * @return $this
      */
     public function with($relations);
@@ -17,7 +17,7 @@ interface RepositoryInterface
     /**
      * Return all models.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function all($attributes = ['*']);
@@ -25,16 +25,16 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key.
      *
-     * @param  mixed $id
-     * @param  array $columns
-     * @return \Illuminate\Database\Eloquent\[Model|Collection]
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
     public function find($id, $attributes = ['*']);
 
     /**
      * Get the models for the given attributes.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function findWhere(array $whereAttributes, $attributes = ['*']);
@@ -42,25 +42,25 @@ interface RepositoryInterface
     /**
      * Find a model by its primary key or return new model.
      *
-     * @param  mixed $id
-     * @param  array $columns
-     * @return \Illuminate\Database\Eloquent\[Model|Collection]
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
     public function findOrNew($id, $attributes = ['*']);
 
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @param  mixed $id
-     * @param  array $columns
-     * @return \Illuminate\Database\Eloquent\[Model|Collection]
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
     public function findOrFail($id, $attributes = ['*']);
 
     /**
      * Get the first model or the first model for the given attributes.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function first(array $attributes = null);
@@ -68,7 +68,7 @@ interface RepositoryInterface
     /**
      * Get the first record matching the attributes or create it.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrCreate(array $attributes);
@@ -76,7 +76,7 @@ interface RepositoryInterface
     /**
      * Get the first record matching the attributes or instantiate it.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrNew(array $attributes);
@@ -84,7 +84,7 @@ interface RepositoryInterface
     /**
      * Create and save a new model.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function create(array $attributes);
@@ -92,9 +92,9 @@ interface RepositoryInterface
     /**
      * Update the model attributes.
      *
-     * @param  array $attributes
-     * @param  int|null $id
-     * @throws \Exception When id is not given
+     * @param  array  $attributes
+     * @param  int|null  $id
+     * @throws \Exception  When id is not given
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -103,7 +103,7 @@ interface RepositoryInterface
     /**
      * Save the model.
      *
-     * @param  \Illuminate\Database Eloquent\Model $model
+     * @param  \Illuminate\Database Eloquent\Model  $model
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function save(Model $model);
@@ -115,7 +115,7 @@ interface RepositoryInterface
      *     $id                  id of the model
      *     [id1[, id2, ...]]    array of ids.
      *
-     * @param  mixed $model
+     * @param  mixed  $model
      * @return bool|int Boolean when model is deleted or the number of models deleted
      */
     public function delete($model);
@@ -123,9 +123,9 @@ interface RepositoryInterface
     /**
      * Query model if it has a given relation.
      *
-     * @param  string $relation
-     * @param  string $operator
-     * @param  int $count
+     * @param  string  $relation
+     * @param  string  $operator
+     * @param  int  $count
      * @return $this
      */
     public function has($relation, $operator = '>=', $count = 1);
@@ -133,9 +133,9 @@ interface RepositoryInterface
     /**
      * Return a collection of models by paginated approach.
      *
-     * @param  int $perPage
-     * @param  int|null $page
-     * @param  array $attributes
+     * @param  int  $perPage
+     * @param  int|null  $page
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function paginate($perPage = 15, $page = null, $attributes = ['*']);
@@ -143,7 +143,7 @@ interface RepositoryInterface
     /**
      * Set attributes to be selected.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return $this
      */
     public function attributes($attributes = ['*']);
@@ -158,7 +158,7 @@ interface RepositoryInterface
     /**
      * Set basic filters.
      *
-     * @param  array $filters
+     * @param  array  $filters
      * @return $this
      */
     public function filters($filters = []);
@@ -166,7 +166,7 @@ interface RepositoryInterface
     /**
      * Set sort.
      *
-     * @param  array $sort
+     * @param  array  $sort
      * @return $this
      */
     public function sort($sort = []);
@@ -174,7 +174,7 @@ interface RepositoryInterface
     /**
      * Set limit.
      *
-     * @param  int $limit
+     * @param  int  $limit
      * @return $this
      */
     public function limit($limit);
@@ -182,7 +182,7 @@ interface RepositoryInterface
     /**
      * Set offset.
      *
-     * @param  int $offset
+     * @param  int  $offset
      * @return $this
      */
     public function offset($offset);
@@ -190,7 +190,7 @@ interface RepositoryInterface
     /**
      * Get models with applied query.
      *
-     * @param  array $attributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function get($attributes = ['*']);
@@ -198,9 +198,9 @@ interface RepositoryInterface
     /**
      * Search any input against the given attributes.
      *
-     * @param  string $input
-     * @param  array $compareAttributes
-     * @param  array $attributes
+     * @param  string  $input
+     * @param  array  $compareAttributes
+     * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function search($text, $compareAttributes = ['*'], $attributes = ['*']);
