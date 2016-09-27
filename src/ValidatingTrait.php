@@ -24,7 +24,7 @@ trait ValidatingTrait
      */
     public function createRules()
     {
-        return $this->defaultRules();
+        return property_exists($this, 'createRules') ? $this->createRules : $this->defaultRules();
     }
 
     /**
@@ -34,7 +34,7 @@ trait ValidatingTrait
      */
     public function updateRules()
     {
-        return $this->defaultRules();
+        return property_exists($this, 'updateRules') ? $this->updateRules : $this->defaultRules();
     }
 
     /**
@@ -55,5 +55,21 @@ trait ValidatingTrait
         }
 
         return is_array($key) ? array_only($this->rules, $key) : $this->rules[$key];
+    }
+
+    /**
+     * Set the rules.
+     *
+     * @param  array  $rules
+     * @param  string|null  $operation
+     * @return $this
+     */
+    public function setRules($rules = [], $operation = null)
+    {
+        $rulesProperty = $operation ? $operation.'Rules' : 'rules';
+
+        $this->{$rulesProperty} = $rules;
+
+        return $this;
     }
 }
