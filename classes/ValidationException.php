@@ -2,5 +2,4 @@
 
 class ValidationException extends \Exception
 {
-    
 }

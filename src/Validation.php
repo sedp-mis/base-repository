@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Validator;
 class Validation implements ValidationInterface
 {
     /**
-     * The validation rules for create or update.
+     * Eloquent model.
      *
-     * @var array
+     * @var \Illuminate\Database\Eloquent\Model
      */
-    protected $validationRules = [];
+    protected $model;
 
     /**
      * Other validations to perform.
@@ -24,36 +24,31 @@ class Validation implements ValidationInterface
     /**
      * Constructor.
      *
-     * @param array $validationRules
+     * @param  \Illuminate\Database\Eloquent\Model|null
      */
-    public function __construct(array $validationRules)
+    public function __construct($model = null)
     {
-        $this->validationRules = $validationRules;
-    }
-
-    /**
-     * Identify if validation is empty or has no rules.
-     *
-     * @return bool
-     */
-    public function isEmpty()
-    {
-        return empty($this->validationRules);
+        $this->model = $model;
     }
 
     /**
      * Validate model attributes before saving.
      * Throw an exception when validation fails.
      *
-     * @param  \Eloquent
+     * @param  string  $operation
+     * @param  array|\Illuminate\Database\Eloquent\Model $model
      * @throws \Exception
      * @return void
      */
-    public function validate($model)
+    public function validate($operation, $model)
     {
-        $validationRules = $this->interpolateValidationRules($model);
+        $model = is_array($model) ? $model : $model->getAttributes();
 
-        $validator = Validator::make($model->getAttributes(), $validationRules);
+        $rules = $this->model->rules($operation == 'update' ? array_keys($model) : null, $operation);
+
+        $rules = $this->interpolateValidationRules($rules, $model);
+
+        $validator = Validator::make($model, $rules);
 
         $messages = [];
 
@@ -73,11 +68,16 @@ class Validation implements ValidationInterface
         }
     }
 
-    protected function interpolateValidationRules($model)
+    /**
+     * Interpolate model attribute values on validation rules.
+     *
+     * @param  array $rules
+     * @param  array $model
+     * @return array
+     */
+    protected function interpolateValidationRules($rules, $model)
     {
-        $validationRules = $this->validationRules;
-
-        foreach ($validationRules as &$rule) {
+        foreach ($rules as &$rule) {
             $attrs = last(chars_within($rule, ['{', '}']));
 
             foreach ($attrs as $attr) {
@@ -86,12 +86,12 @@ class Validation implements ValidationInterface
                     // Useful for unique validation rule, which lets you check unique with exceptId parameter and
                     // other column keys combination. Example:
                     // 'name' => 'unique:parishes,name,{id},id,parish_category_id,{parish_category_id}'
-                    is_null($model->{$attr}) && $attr == $model->getKeyName() ? 'NULL' : $model->{$attr},
+                    is_null($model[$attr]) && $attr == $this->model->getKeyName() ? 'NULL' : $model[$attr],
                     $rule
                 );
             }
         }
 
-        return $validationRules;
+        return $rules;
     }
 }

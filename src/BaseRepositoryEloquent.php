@@ -2,17 +2,18 @@
 
 namespace SedpMis\BaseRepository;
 
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class BaseRepositoryEloquent implements RepositoryInterface
 {
     /**
      * Eloquent model.
      *
-     * @var \Eloquent
+     * @var \Illuminate\Database\Eloquent\Model
      */
     protected $model;
 
@@ -80,13 +81,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected $isSaveRecursive = false;
 
     /**
-     * Validation rules before saving model.
-     *
-     * @var array
-     */
-    protected $validationRules = [];
-
-    /**
      * Hold the validation instance.
      *
      * @var \SedpMis\BaseRepository\ValidationInterface
@@ -96,7 +90,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Set the repository model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return $this
      */
     public function setModel($model)
@@ -104,26 +98,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
         $this->model = $model;
 
         return $this;
-    }
-
-    /**
-     * Return the validation rules.
-     *
-     * @return array
-     */
-    public function validationRules()
-    {
-        return $this->validationRules ?: (method_exists($this->model, 'rules') ? $this->model->rules() : []);
-    }
-
-    /**
-     * Return the validation.
-     *
-     * @return \SedpMis\BaseRepository\ValidationInterface
-     */
-    public function validation()
-    {
-        return $this->validation ?: $this->validation = new Validation($this->validationRules());
     }
 
     /**
@@ -172,7 +146,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Set eagerload relations.
      *
-     * @param  array $relations
+     * @param  array  $relations
      * @return $this
      */
     public function with($relations)
@@ -185,8 +159,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Return all models.
      *
-     * @param  array                          $attributes
-     * @return \Illuminate\Support\Collection
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function all($attributes = array('*'))
     {
@@ -196,9 +170,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Find a model by its primary key.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
     public function find($id, $attributes = array('*'))
     {
@@ -208,8 +182,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Get the models for the given attributes.
      *
-     * @param  array          $attributes
-     * @return \Eloquent|null
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function findWhere(array $whereAttributes, $attributes = array('*'))
     {
@@ -219,9 +193,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Find a model by its primary key or return new model.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
     public function findOrNew($id, $attributes = array('*'))
     {
@@ -231,9 +205,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @param  mixed                                    $id
-     * @param  array                                    $columns
-     * @return \Illuminate\Support\Collection|\Eloquent
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
     public function findOrFail($id, $attributes = array('*'))
     {
@@ -243,8 +217,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Get the first model or the first model for the given attributes.
      *
-     * @param  array          $attributes
-     * @return \Eloquent|null
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function first(array $attributes = null)
     {
@@ -260,8 +234,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Get the first record matching the attributes or create it.
      *
-     * @param  array     $attributes
-     * @return \Eloquent
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrCreate(array $attributes)
     {
@@ -271,8 +245,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Get the first record matching the attributes or instantiate it.
      *
-     * @param  array     $attributes
-     * @return \Eloquent
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrNew(array $attributes)
     {
@@ -280,81 +254,136 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Make a new instance of the model from the attributes.
+     * Return the validation.
      *
-     * @param  array                   $attributes
-     * @throws \ModelNotFoundException When model not found by the given id
-     * @return \Eloquent
+     * @return \SedpMis\BaseRepository\ValidationInterface
      */
-    public function makeModel(array $attributes)
+    public function validation()
     {
+        return $this->validation ?: $this->validation = new Validation($this->model);
+    }
+
+    /**
+     * Create and store a new model.
+     *
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function create(array $attributes)
+    {
+        /*
+         * Check if is single associate array item.
+         */
+        if (array_is_assoc(head($attributes))) {
+            throw new InvalidArgumentException('Trying to pass multiple items in create() method. Please use createMany() instead.');
+        }
+
+        // Unset primary key when $updateWhenIdExists is true, to make sure to create new record in database.
+        if (array_is_assoc($attributes) && $this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
+            unset($attributes[$pk]);
+        }
+
+        $this->validation()->validate('create', $attributes);
+
         $model = $this->model->newInstance($attributes);
 
-        if ($this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
-            $model = $this->model->findOrFail($id = $attributes[$pk], array_merge([$pk], $this->filterFillables(array_keys($attributes))));
+        $this->beforeSaveModel($model);
 
-            $model->fill($attributes);
-        }
+        $model->save();
 
         return $model;
     }
 
     /**
-     * Filter fillable attributes of a model.
+     * Create and store multiple new models.
      *
-     * @param  array $attributes
-     * @return array
+     * @param  array  $items
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function filterFillables(array $attributes)
+    public function createMany(array $items)
     {
-        return array_filter($attributes, function ($attribute) {
-            return $this->model->isFillable($attribute);
-        });
+        $models = collection();
+
+        foreach ($items as $item) {
+            $models[] = $this->create($item);
+        }
+
+        return $models;
+    }
+
+    /** Update the model or models attributes.
+     * @param  int|null  $id
+     * @param  array  $attributes
+     * @throws \Exception  When id is not given
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function update($id, array $attributes)
+    {
+        $model = $this->model->findOrFail($id);
+
+        $this->validation()->validate('update', array_merge($attributes, [$this->model->getKeyName() => $id]));
+
+        $model->fill($attributes);
+
+        $model->save();
+
+        return $model;
     }
 
     /**
-     * Save the model or data, array or collection of the model.
+     * Update multiple models attributes in the storage.
      *
-     * @param  array|\Eloquent|\Illuminate\Database\Eloquent\Collection $model
-     * @return \Eloquent|\Illuminate\Database\Eloquent\Collection
+     * @param  array  $items
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function updateMany(array $items)
+    {
+        $ids    = array_pluck($items, $this->model->getKeyName());
+        $models = $this->model->find($ids);
+
+        foreach ($models as $model) {
+            $attributes = array_first($items, function ($i, $attributes) use ($model) {
+                if (!array_key_exists($model->getKeyName(), $attributes)) {
+                    return false;
+                }
+
+                return $attributes[$model->getKeyName()] == $model->getKey();
+            });
+
+            $this->validation()->validate('update', array_merge($attributes, [$model->getKeyName() => $model->getKey()]));
+
+            $model->fill($attributes);
+            $model->save();
+        }
+
+        return $models;
+    }
+
+    /**
+     * Save the model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
      */
     public function save($model)
     {
-        /*
-         * Polymorphic to handle collection or array of models
-         */
-        if (
-            $model instanceof Collection ||
-            is_array($model) &&
-            (
-                ($first = head($model)) instanceof EloquentModel ||
-                array_is_assoc($first)
-            )
-        ) {
-            return $this->saveMany($model);
+        if ($model instanceof Collection || is_array($model)) {
+            throw new InvalidArgumentException('Parameter $model must be an instance of \Illuminate\Database\Eloquent\Model');
         }
 
-        /*
-         * Main logic of handling save on single model
-         */
-        if (is_array($model) && array_is_assoc($model)) {
-            $model = $this->makeModel($model);
-        }
+        $this->validation()->validate('save', $model->getAttributes());
 
-        if (!$this->validation()->isEmpty()) {
-            $this->validation()->validate($model);
-        }
+        $this->beforeSaveModel($model);
 
-        $this->saveModel($model);
-
-        return $model;
+        return $model->save();
     }
 
     /**
-     * Save collection or array of models.
+     * Save multiple models.
      *
-     * @param  array|\Illuminate\Support\Collection $models
-     * @return \Illuminate\Support\Collection
+     * @param  array|\Illuminate\Database\Eloquent\Collection  $models
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function saveMany($models)
     {
@@ -369,130 +398,14 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Save the model.
-     *
-     * @param  \Eloquent $model
-     * @return bool
-     */
-    protected function saveModel($model)
-    {
-        // Run some manipulation before saving model.
-        $this->beforeSaveModel($model);
-
-        $saved = $model->save();
-
-        if (!$this->isSaveRecursive) {
-            return $saved;
-        }
-
-        foreach ($model->getRelations() as $relation) {
-            $saved = $this->saveModel($relation);
-        }
-
-        return $saved;
-    }
-
-    /**
      * Manipulate model before final save.
      *
-     * @param  \Eloquent $model
-     * @return \Eloquent
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return\Illuminate\Database\Eloquent\Model
      */
     protected function beforeSaveModel($model)
     {
         return $model;
-    }
-
-    /**
-     * Create and save the model.
-     *
-     * @param  array                                    $attributes
-     * @return \Eloquent|\Illuminate\Support\Collection
-     */
-    public function create(array $attributes)
-    {
-        /*
-         * Polymorphic to handle multiple array of attributes
-         */
-        if (array_is_assoc(head($attributes))) {
-            $arrayAttributes = $attributes;
-            $models          = collection();
-            foreach ($arrayAttributes as $attributes) {
-                $models[] = $this->create($attributes);
-            }
-
-            return $models;
-        }
-
-        /*
-         * Main logic handling create on single array
-         */
-        // Unset primary key when $updateWhenIdExists is true, to make sure to create new record in database.
-        if (is_array($attributes) && array_is_assoc($attributes) && $this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
-            unset($attributes[$pk]);
-        }
-
-        return $this->save($attributes);
-    }
-
-    /**
-     * Update the model attributes.
-     *
-     * @param  array                                    $attributes
-     * @param  int|null                                 $id
-     * @throws \Exception                               When id is not given
-     * @throws \ModelNotFoundException
-     * @return \Eloquent|\Illuminate\Support\Collection
-     */
-    public function update(array $attributes, $id = null)
-    {
-        /*
-         * Polymorphic to handle multiple array of attributes
-         */
-        if (array_is_assoc(head($attributes))) {
-            $arrayAttributes = $attributes;
-            $models          = collection();
-            foreach ($arrayAttributes as $attributes) {
-                $models[] = $this->update($attributes);
-            }
-
-            return $models;
-        }
-
-        /*
-         * Main logic handling of update on single array
-         */
-        $id = $id ?: $this->getIdFromAttributes($attributes);
-
-        if (is_null($id)) {
-            throw new \Exception("The `{$this->model->getKeyName()}` does not exist from the given attributes, cannot update {$this->model->getClass()}. ".
-                'Attributes: '.json_encode($attributes));
-        }
-
-        $model = $this->model->findOrFail($id);
-
-        if ($model instanceof Collection) {
-            $model->each(function ($model) use ($attributes) {
-                $model->fill($attributes);
-            });
-        } else {
-            $model->fill($attributes);
-        }
-
-        return $this->save($model);
-    }
-
-    /**
-     * Get the id from attributes.
-     *
-     * @param  array $attributes
-     * @return int
-     */
-    public function getIdFromAttributes(array $attributes)
-    {
-        if (array_key_exists($keyName = $this->model->getKeyName(), $attributes) && !empty($attributes[$keyName])) {
-            return $attributes[$keyName];
-        }
     }
 
     /**
@@ -639,33 +552,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Fetching eloquent models with filtering, sorting and limit-offset.
-     *
-     * @deprecated Use builder pattern, get() method
-     * @param  array    $attributes
-     * @param  array    $fiters
-     * @param  array    $sort
-     * @param  int|null $limit
-     * @param  int      $offset
-     * @return array
-     */
-    public function fetch($attributes = ['*'], $filters = [], $sort = [], $limit = null, $offset = 0)
-    {
-        $query = $this->eagerLoadRelations();
-
-        //filters
-        $this->queryFilters($query, $filters);
-
-        //sort
-        $this->querySort($query, $sort);
-
-        //limit and offset
-        $this->queryLimitOffset($query, $limit, $offset);
-
-        return $query->get($attributes ?: ['*']);
-    }
-
-    /**
      * Return a collection of models by paginated approach.
      *
      * @param  int                                      $perPage
@@ -792,13 +678,13 @@ class BaseRepositoryEloquent implements RepositoryInterface
         // has relations
         $this->queryHasRelations($query);
 
-        //filters
+        // filters
         $this->queryFilters($query);
 
-        //sort
+        // sort
         $this->querySort($query);
 
-        //limit and offset
+        // limit and offset
         $this->queryLimitOffset($query);
 
         return $query;

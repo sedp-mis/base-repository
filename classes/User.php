@@ -3,7 +3,7 @@
 
 class User extends BaseModel
 {
-    protected $fillable = ['username', 'name', 'email'];
+    protected $fillable = ['username', 'name', 'email', 'password'];
 
     protected $rules = array(
         'name'                  => 'required|alpha|min:2',

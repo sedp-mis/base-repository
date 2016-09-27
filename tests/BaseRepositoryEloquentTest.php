@@ -27,30 +27,52 @@ class BaseRepositoryEloquentTest extends TestCase
         DB::rollback();
     }
 
-    public function testShouldCreateStoreFindUpdateAndDeleteModel()
+    /**
+     * @expectedException \ValidationException
+     */
+    public function testShouldFailWhenPasswordDidNotMatch()
     {
         $user = $this->repo->create([
-            'username' => 'ajcastro',
-            'password' => 'password',
-            'name'     => 'arjon',
-            'email'    => 'ajcastro29@gmail.com',
+            'username'              => 'ajcastro',
+            'password'              => 'password',
+            'name'                  => 'arjon',
+            'email'                 => 'ajcastro29@gmail.com',
+            'password'              => '123456',
+            'password_confirmation' => '123459',
+        ]);
+    }
+
+    public function testShouldCreateUser()
+    {
+        $user = $this->repo->create([
+            'username'              => 'ajcastro',
+            'password'              => 'password',
+            'name'                  => 'arjon',
+            'email'                 => 'ajcastro29@gmail.com',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
         ]);
 
-        $storedUser = $this->repo->find($user->id);
-
+        $storedUser = User::find($user->id);
         $this->assertTrue($user instanceof User);
+        $this->assertTrue($user->exists);
         $this->assertTrue($storedUser instanceof User);
         $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());
+    }
 
-        $storedUser->name = 'ajcastro';
+    public function testShouldUpdateUser()
+    {
+        $user = User::create([
+            'username' => 'ajcastro',
+            'password' => 'password',
+            'name'     => 'arjon_x',
+            'email'    => 'ajcastro29@gmail.com',
+            'password' => '123456',
+        ]);
 
-        $this->repo->update(['name' => $storedUser->name], $storedUser->id);
+        $updatedUser = $this->repo->update($user->id, ['name' => 'arjon']);
 
-        $updatedUser = $this->repo->find($storedUser->id);
-        $this->assertEquals($updatedUser->getAttributes(), $storedUser->getAttributes());
-
-        $this->repo->delete($user);
-
-        $this->assertEquals(0, User::count());
+        $this->assertEquals('arjon', User::findOrFail($user->id)->name);
+        $this->assertTrue($updatedUser instanceof User);
     }
 }
