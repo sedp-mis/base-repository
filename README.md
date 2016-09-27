@@ -1,4 +1,4 @@
-# Base Repository for Laravel 4.2 Models
+# Base Repository for Laravel
 
 [![Build Status](https://travis-ci.org/sedp-mis/base-repository.svg?branch=master)](https://travis-ci.org/sedp-mis/base-repository)
 
