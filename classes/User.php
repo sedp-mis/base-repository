@@ -7,7 +7,7 @@ class User extends BaseModel
 
     protected $rules = array(
         'name'                  => 'required|alpha|min:2',
-        'username'              => 'required|unique:users',
+        'username'              => 'required|unique:users,username,{id},id',
         'email'                 => 'required|email',
         'password'              => 'required|alpha_num|between:6,12|confirmed',
         'password_confirmation' => 'required|alpha_num|between:6,12',
