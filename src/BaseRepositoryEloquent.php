@@ -267,6 +267,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * Create and store a new model.
      *
      * @param  array  $attributes
+     * @throws \InvalidArgumentException
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function create(array $attributes)
@@ -364,6 +365,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * Save the model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @throws \InvalidArgumentException
      * @return bool
      */
     public function save($model)
