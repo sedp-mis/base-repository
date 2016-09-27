@@ -94,7 +94,48 @@ class BaseRepositoryEloquentTest extends TestCase
         $storedUser = User::find($user->id);
         $this->assertTrue($user instanceof User);
         $this->assertTrue($user->exists);
-        $this->assertTrue($storedUser instanceof User);
         $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());
+    }
+
+    public function testShouldCreateUserUsingSave()
+    {
+        $user = new User([
+            'username'              => 'ajcastro',
+            'password'              => 'password',
+            'name'                  => 'arjon',
+            'email'                 => 'ajcastro29@gmail.com',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
+        ]);
+
+        $model = new User;
+        $model->setRules([]);
+        $repo = (new BaseRepositoryEloquent)->setModel($model);
+
+        $repo->save($user);
+
+        $storedUser = User::find($user->id);
+
+        $this->assertTrue($user->exists);
+        $this->assertEquals($storedUser->getAttributes(), $user->getAttributes());
+    }
+
+    public function testShouldUpdateUserUsingSave()
+    {
+        $user = User::create([
+            'username'              => 'ajcastro',
+            'password'              => 'password',
+            'name'                  => 'arjon_x',
+            'email'                 => 'ajcastro29@gmail.com',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
+        ]);
+
+        $user->name     = 'arjon';
+        $user->username = 'arjonyehey';
+
+        $this->repo->save($user);
+
+        $this->assertEquals(User::find($user->id)->getAttributes(), $user->getAttributes());
     }
 }
