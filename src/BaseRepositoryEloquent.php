@@ -3,7 +3,7 @@
 namespace SedpMis\BaseRepository;
 
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
@@ -327,7 +327,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
             $model instanceof Collection ||
             is_array($model) &&
             (
-                ($first = head($model)) instanceof EloquentModel ||
+                ($first = head($model)) instanceof Model ||
                 array_is_assoc($first)
             )
         ) {
