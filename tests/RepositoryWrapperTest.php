@@ -1,6 +1,6 @@
 <?php
 
-class RepositoryWrapperTest extends TestCase
+class RepositoryWrapperTest /*extends TestCase*/
 {
     public function testRepositoryShouldContainSpyRepositoryByTheGivenVariable()
     {
