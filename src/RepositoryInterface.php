@@ -116,7 +116,7 @@ interface RepositoryInterface
      *     [id1[, id2, ...]]    array of ids.
      *
      * @param  mixed  $model
-     * @return bool|int Boolean when model is deleted or the number of models deleted
+     * @return bool|int  Boolean when model is deleted or the number of models deleted
      */
     public function delete($model);
 
