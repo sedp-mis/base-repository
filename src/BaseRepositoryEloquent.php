@@ -312,7 +312,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
         return $models;
     }
 
-    /** Update the model or models attributes.
+    /**
+     * Update the model attributes in the storage.
+     *
      * @param  int|null  $id
      * @param  array  $attributes
      * @throws \Exception  When id is not given
