@@ -254,19 +254,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Filter fillable attributes of a model.
-     *
-     * @param  array $attributes
-     * @return array
-     */
-    protected function filterFillables(array $attributes)
-    {
-        return array_filter($attributes, function ($attribute) {
-            return $this->model->isFillable($attribute);
-        });
-    }
-
-    /**
      * Return the validation.
      *
      * @return \SedpMis\BaseRepository\ValidationInterface
