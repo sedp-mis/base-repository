@@ -288,7 +288,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
          * Check if is single associate array item.
          */
         if (array_is_assoc(head($attributes))) {
-            throw new InvalidArgumentException("Trying to pass multiple items in create() method. Please use createMany() instead.");
+            throw new InvalidArgumentException('Trying to pass multiple items in create() method. Please use createMany() instead.');
         }
 
         // Unset primary key when $updateWhenIdExists is true, to make sure to create new record in database.
@@ -319,7 +319,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /** Update the model or models attributes.
-     *
      * @param  int|null  $id
      * @param  array  $attributes
      * @throws \Exception  When id is not given
@@ -347,7 +346,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function updateMany(array $items)
     {
-        $ids = array_pluck($items, $this->model->getKeyName());
+        $ids    = array_pluck($items, $this->model->getKeyName());
         $models = $this->model->find($ids);
 
         foreach ($models as $model) {
