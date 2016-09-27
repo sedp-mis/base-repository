@@ -48,6 +48,8 @@ trait ValidatingTrait
     {
         $ruleName = $operation ? "{$operation}Rules" : 'defaultRules';
 
+        $ruleName = method_exists($this, $ruleName) ? $ruleName : 'defaultRules';
+
         $rules = $this->{$ruleName}();
 
         if (is_null($key)) {
