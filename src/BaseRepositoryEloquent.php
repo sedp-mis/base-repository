@@ -67,13 +67,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected $hasRelations = [];
 
     /**
-     * Update model when id or primary key exists in model attributes, instead inserting new model.
-     *
-     * @var bool
-     */
-    protected $updateWhenIdExists = true;
-
-    /**
      * Whether to save model recursively on its relations or aggregates models.
      *
      * @var bool
@@ -277,11 +270,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
          */
         if (array_is_assoc(head($attributes))) {
             throw new InvalidArgumentException('Trying to pass multiple items in create() method. Please use createMany() instead.');
-        }
-
-        // Unset primary key when $updateWhenIdExists is true, to make sure to create new record in database.
-        if (array_is_assoc($attributes) && $this->updateWhenIdExists && array_key_exists($pk = $this->model->getKeyName(), $attributes)) {
-            unset($attributes[$pk]);
         }
 
         $this->validation()->validate('create', $attributes);
