@@ -383,7 +383,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
         $models = is_array($models) ? collection($models) : $models;
 
         foreach ($models as &$model) {
-            $model = $this->save($model);
+            $this->save($model);
         }
 
         return $models;
