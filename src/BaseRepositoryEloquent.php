@@ -488,6 +488,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
 
                 $operator = is_numeric($operator) ? 'equals' : $operator;
 
+                $operator = $this->replaceOperatorAlias($operator);
+
                 if ($operator == 'equals') {
                     $query->whereIn($key, $values);
                 } elseif ($operator == 'not_equals') {
@@ -503,6 +505,24 @@ class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         return $query;
+    }
+
+    /**
+     * Return the operator of an alias.
+     *
+     * @param  string $alias
+     * @return string
+     */
+    protected function replaceOperatorAlias($alias)
+    {
+        $aliases = [
+            'e'  => 'equals',
+            'ne' => 'not_equals',
+            'n'  => 'null',
+            'nn' => 'not_null',
+        ];
+
+        return array_key_exists($alias, $aliases) ? $aliases[$alias] : $alias;
     }
 
     /**
