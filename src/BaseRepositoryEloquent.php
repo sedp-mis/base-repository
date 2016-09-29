@@ -748,9 +748,13 @@ class BaseRepositoryEloquent implements RepositoryInterface
             $compareAttributes = Schema::getColumnListing($this->model->getTable());
         }
 
+        $sqls = [];
+
         foreach ($compareAttributes as $column) {
-            $query->orWhere($column, 'like', '%'.join('%', str_split($input)).'%');
+            $sqls[] = "{$column} like '%".join('%', str_split($input))."%'";
         }
+
+        $query->whereRaw('('.join(' OR ', $sqls).')');
 
         return $query->get($this->selectAttributes($attributes));
     }
