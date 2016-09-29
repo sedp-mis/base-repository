@@ -268,7 +268,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
         /*
          * Check if is single associate array item.
          */
-        if (array_is_assoc(head($attributes))) {
+        if (!array_is_assoc($attributes)) {
             throw new InvalidArgumentException('Trying to pass multiple items in create() method. Please use createMany() instead.');
         }
 
