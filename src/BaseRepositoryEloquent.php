@@ -486,11 +486,11 @@ class BaseRepositoryEloquent implements RepositoryInterface
             foreach ($filter as $operator => $values) {
                 $values = is_array($values) ? $values : [$values];
 
-                $operator = is_numeric($operator) ? '=' : $operator;
+                $operator = is_numeric($operator) ? 'equals' : $operator;
 
-                if ($operator == '=') {
+                if ($operator == 'equals') {
                     $query->whereIn($key, $values);
-                } elseif ($operator == '!=') {
+                } elseif ($operator == 'not_equals') {
                     $query->whereNotIn($key, $values);
                 } elseif ($operator == 'null') {
                     $query->whereNull($key);
