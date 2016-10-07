@@ -564,33 +564,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Return a collection of models by paginated approach.
-     *
-     * @param  int                                      $perPage
-     * @param  int|null                                 $page
-     * @param  array                                    $attributes
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function paginate($perPage = 15, $page = null, $attributes = ['*'])
-    {
-        $pagelo = new PageLimitOffset($perPage, $page);
-
-        return $this->limit($pagelo->limit())
-            ->offset($pagelo->offset())
-            ->get($attributes);
-    }
-
-    /**
-     * Return the underlying query.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->prepareQuery();
-    }
-
-    /**
      * Return the underlying model.
      *
      * @return \Illuminate\Database\Eloquent\Model
@@ -703,6 +676,16 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
+     * Return the underlying query.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function query()
+    {
+        return $this->prepareQuery();
+    }
+
+    /**
      * Return the final attributes to be selected.
      *
      * @param  array $attributes
@@ -728,6 +711,23 @@ class BaseRepositoryEloquent implements RepositoryInterface
     public function get($attributes = ['*'])
     {
         return $this->query()->get($this->selectAttributes($attributes));
+    }
+
+    /**
+     * Return a collection of models by paginated approach.
+     *
+     * @param  int                                      $perPage
+     * @param  int|null                                 $page
+     * @param  array                                    $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function paginate($perPage = 15, $page = null, $attributes = ['*'])
+    {
+        $pagelo = new PageLimitOffset($perPage, $page);
+
+        return $this->limit($pagelo->limit())
+            ->offset($pagelo->offset())
+            ->get($attributes);
     }
 
     /**
