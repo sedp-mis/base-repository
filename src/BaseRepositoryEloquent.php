@@ -632,7 +632,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function limit($limit)
     {
-        $this->limit = $limit;
+        if ($limit) {
+            $this->limit = $limit;
+        }
 
         return $this;
     }
@@ -645,7 +647,29 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function offset($offset)
     {
-        $this->offset = $offset;
+        if ($offset) {
+            $this->offset = $offset;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Apply query params to set query when fetching records.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return $this
+     */
+    public function applyQueryParams($request)
+    {
+        $pagelo = new PageLimitOffset($request->get('per_page'), $request->get('page'));
+
+        $this->with($request->get('relations', []))
+            ->attributes($request->get('attributes', ['*']))
+            ->filters($request->get('filters', []))
+            ->sort($request->sort('sort', []))
+            ->limit($pagelo->limit())
+            ->offset($pagelo->offset());
 
         return $this;
     }
