@@ -220,12 +220,12 @@ interface RepositoryInterface
     /**
      * Return a collection of models by paginated approach.
      *
+     * @param  int                                      $page
      * @param  int                                      $perPage
-     * @param  int|null                                 $page
      * @param  array                                    $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function paginate($perPage = 15, $page = null, $attributes = ['*']);
+    public function paginate($page = 1, $perPage = 15, $attributes = ['*']);
 
     /**
      * Search any input against the given attributes.
