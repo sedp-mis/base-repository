@@ -665,7 +665,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function applyQueryParams($request)
     {
-        $pagelo = new PageLimitOffset($request->get('per_page'), $request->get('page'));
+        $pagelo = new PageLimitOffset($request->get('per_page', 15), $request->get('page'));
 
         $this->with($request->get('relations', []))
             ->attributes($request->get('attributes', ['*']))
@@ -743,12 +743,12 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Return a collection of models by paginated approach.
      *
+     * @param  int                                      $page
      * @param  int                                      $perPage
-     * @param  int|null                                 $page
      * @param  array                                    $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function paginate($perPage = 15, $page = null, $attributes = ['*'])
+    public function paginate($page = 1, $perPage = 15, $attributes = ['*'])
     {
         $pagelo = new PageLimitOffset($perPage, $page);
 
