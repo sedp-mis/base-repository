@@ -691,7 +691,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      * @param  array $attributes
      * @return array
      */
-    protected function selectAttributes($attributes = ['*'])
+    protected function finalAttributes($attributes = ['*'])
     {
         $attributes = $attributes ?: ['*'];
 
@@ -710,7 +710,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function get($attributes = ['*'])
     {
-        return $this->query()->get($this->selectAttributes($attributes));
+        return $this->query()->get($this->finalAttributes($attributes));
     }
 
     /**
@@ -756,6 +756,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
 
         $query->whereRaw('('.join(' OR ', $sqls).')');
 
-        return $query->get($this->selectAttributes($attributes));
+        return $query->get($this->finalAttributes($attributes));
     }
 }
