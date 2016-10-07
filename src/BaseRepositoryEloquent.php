@@ -667,7 +667,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
         $this->with($request->get('relations', []))
             ->attributes($request->get('attributes', ['*']))
             ->filters($request->get('filters', []))
-            ->sort($request->sort('sort', []))
+            ->sort($request->get('sort', []))
             ->limit($pagelo->limit())
             ->offset($pagelo->offset());
 
