@@ -155,16 +155,6 @@ interface RepositoryInterface
     public function has($relation, $operator = '>=', $count = 1);
 
     /**
-     * Return a collection of models by paginated approach.
-     *
-     * @param  int  $perPage
-     * @param  int|null  $page
-     * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function paginate($perPage = 15, $page = null, $attributes = ['*']);
-
-    /**
      * Set attributes to be selected.
      *
      * @param  array  $attributes
@@ -212,12 +202,30 @@ interface RepositoryInterface
     public function offset($offset);
 
     /**
+     * Apply query params to set query when fetching records.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return $this
+     */
+    public function applyQueryParams($request);
+
+    /**
      * Get models with applied query.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function get($attributes = ['*']);
+
+    /**
+     * Return a collection of models by paginated approach.
+     *
+     * @param  int                                      $perPage
+     * @param  int|null                                 $page
+     * @param  array                                    $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function paginate($perPage = 15, $page = null, $attributes = ['*']);
 
     /**
      * Search any input against the given attributes.
