@@ -483,6 +483,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
         $filters = $filters ?: $this->filters;
 
         foreach ($filters as $key => $filter) {
+            // Support for single key-value pair filter.
+            $filter = !is_array($filter) ? [$filter] : $filter;
+
             foreach ($filter as $operator => $values) {
                 $values = is_array($values) ? $values : [$values];
 
