@@ -144,7 +144,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function with($relations)
     {
-        $this->eagerLoadRelations = $relations;
+        $this->eagerLoadRelations = array_merge($this->eagerLoadRelations, $relations);
 
         return $this;
     }
@@ -620,7 +620,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function hasRelations($hasRelations = [])
     {
-        $this->hasRelations = $hasRelations;
+        $this->hasRelations = array_merge($this->hasRelations, $hasRelations);
 
         return $this;
     }
@@ -633,7 +633,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function filters($filters = [])
     {
-        $this->filters = $filters;
+        $this->filters = array_merge($this->filters, $filters);
 
         return $this;
     }
@@ -646,7 +646,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function sort($sort = [])
     {
-        $this->sort = $sort;
+        $this->sort = array_merge($this->sort, $sort);
 
         return $this;
     }
