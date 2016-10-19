@@ -144,6 +144,8 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function with($relations)
     {
+        $relations = !is_array($relations) ? [$relations] : $relations;
+
         $this->eagerLoadRelations = array_merge($this->eagerLoadRelations, $relations);
 
         return $this;
