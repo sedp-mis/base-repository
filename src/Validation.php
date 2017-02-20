@@ -58,7 +58,7 @@ class Validation implements ValidationInterface
 
         // Perform other validations
         foreach ($this->validations as $validationMethod) {
-            if ($message = $this->{$validationMethod}($attributes)) {
+            if ($message = $this->{$validationMethod}($model, $attributes)) {
                 $messages[] = $message;
             }
         }
