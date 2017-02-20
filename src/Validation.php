@@ -42,7 +42,7 @@ class Validation implements ValidationInterface
      */
     public function validate($model, $attributes = [])
     {
-        $attributes = $model->exists ? $model->getDirty() : $attributes;
+        $attributes = $model->exists ? $model->getDirty() : ($attributes ?: $model->getAttributes());
 
         $rules = $this->model->rules(($model->exists ? array_keys($attributes) : null), ($model->exists ? 'update' : 'create'));
 
