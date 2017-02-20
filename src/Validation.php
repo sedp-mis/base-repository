@@ -59,7 +59,7 @@ class Validation implements ValidationInterface
         // Perform other validations
         foreach ($this->validations as $validationMethod) {
             if ($message = $this->{$validationMethod}($model, $attributes)) {
-                $messages[] = $message;
+                $messages = array_merge($messages, is_array($message) ? $message : [$message]);
             }
         }
 
