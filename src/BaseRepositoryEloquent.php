@@ -274,9 +274,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
             throw new InvalidArgumentException('Trying to pass multiple items in create() method. Please use createMany() instead.');
         }
 
-        $this->validation()->validate('create', $attributes);
-
         $model = $this->model->newInstance($attributes);
+
+        $this->validation()->validate($model, $attributes);
 
         $this->beforeSaveModel($model);
 
@@ -315,9 +315,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
     {
         $model = $this->model->findOrFail($id);
 
-        $this->validation()->validate('update', array_merge($attributes, [$this->model->getKeyName() => $id]));
-
         $model->fill($attributes);
+
+        $this->validation()->validate($model);
 
         $model->save();
 
@@ -344,9 +344,10 @@ class BaseRepositoryEloquent implements RepositoryInterface
                 return $attributes[$model->getKeyName()] == $model->getKey();
             });
 
-            $this->validation()->validate('update', array_merge($attributes, [$model->getKeyName() => $model->getKey()]));
-
             $model->fill($attributes);
+
+            $this->validation()->validate($model);
+
             $model->save();
         }
 
@@ -366,7 +367,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
             throw new InvalidArgumentException('Parameter $model must be an instance of \Illuminate\Database\Eloquent\Model');
         }
 
-        $this->validation()->validate($model->exists ? 'update' : 'create', $model->getDirty());
+        $this->validation()->validate($model);
 
         $this->beforeSaveModel($model);
 
