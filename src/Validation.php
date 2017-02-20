@@ -35,16 +35,16 @@ class Validation implements ValidationInterface
      * Validate model attributes before saving.
      * Throw an exception when validation fails.
      *
-     * @param  string  $operation
-     * @param  array|\Illuminate\Database\Eloquent\Model $attributes
+     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param  array $attributes Array attributes passed in the repository for create validation
      * @throws \Exception
      * @return void
      */
-    public function validate($operation, $attributes)
+    public function validate($model, $attributes = [])
     {
-        $attributes = is_array($attributes) ? $attributes : $attributes->getAttributes();
+        $attributes = $model->exists ? $model->getDirty() : ($attributes ?: $model->getAttributes());
 
-        $rules = $this->model->rules($operation == 'update' ? array_keys($attributes) : null, $operation);
+        $rules = $this->model->rules(($model->exists ? array_keys($attributes) : null), ($model->exists ? 'update' : 'create'));
 
         $rules = $this->interpolateValidationRules($rules, $attributes);
 
