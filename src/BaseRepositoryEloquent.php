@@ -147,7 +147,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
     {
         $exists = in_array($fk, $attributes);
 
-        if ($exists) { return true;}
+        if ($exists) {
+            return true;
+        }
 
         foreach ($attributes as $attr) {
             if (ends_with($attr, '.'.$fk)) {
