@@ -118,7 +118,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
                         // make sure to select the parent key name as foreign key.
                         if (
                             $q instanceof HasOneOrMany &&
-                            !in_array($fk = $q->getParent()->getForeignKey(), $rules['attributes'])
+                            !$this->fkExistsInAttributes($rules['attributes'], $fk = $q->getParent()->getForeignKey())
                         ) {
                             array_push($rules['attributes'], $fk);
                         }
@@ -134,6 +134,28 @@ class BaseRepositoryEloquent implements RepositoryInterface
         }
 
         return $query->with($this->eagerLoadRelations);
+    }
+
+    /**
+     * Check if fk already exists in attributes.
+     *
+     * @param  array $attributes
+     * @param  string $fk
+     * @return bool
+     */
+    protected function fkExistsInAttributes($attributes, $fk)
+    {
+        $exists = in_array($fk, $attributes);
+
+        if ($exists) { return true;}
+
+        foreach ($attributes as $attr) {
+            if (ends_with($attr, '.'.$fk)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
