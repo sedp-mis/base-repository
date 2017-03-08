@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Collection;
+use SedpMis\Lib\PageLimitOffset;
 use InvalidArgumentException;
 
 class BaseRepositoryEloquent implements RepositoryInterface
