@@ -711,7 +711,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
 
         if ($request->has('search')) {
             $searchParams = $request->get('search', ['input' => null, 'compare' => ['*']]);
-            $this->search($searchParams['input'], $searchParams['compare']);
+            $this->search($searchParams['input'], array_key_exists('compare', $searchParams) ? $searchParams['compare'] : ['*']);
         }
 
         return $this;
