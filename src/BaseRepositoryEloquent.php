@@ -61,6 +61,13 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected $offset = 0;
 
     /**
+     * Search parameters.
+     *
+     * var array
+     */
+    protected $search = ['input' => null, 'compare_attributes' => ['*']];
+
+    /**
      * Has relation checking.
      *
      * @var array
@@ -702,6 +709,11 @@ class BaseRepositoryEloquent implements RepositoryInterface
             ->limit($pagelo->limit())
             ->offset($pagelo->offset());
 
+        if ($request->has('search')) {
+            $searchParams = $request->get('search', ['input' => null, 'compare' => ['*']]);
+            $this->search($searchParams['input'], $searchParams['compare']);
+        }
+
         return $this;
     }
 
@@ -726,6 +738,9 @@ class BaseRepositoryEloquent implements RepositoryInterface
 
         // limit and offset
         $this->queryLimitOffset($query);
+
+        // query search
+        $this->querySearch($query);
 
         return $query;
     }
@@ -786,18 +801,15 @@ class BaseRepositoryEloquent implements RepositoryInterface
     }
 
     /**
-     * Search any input against the given attributes.
+     * Query search.
      *
-     * @param  string                                   $input
-     * @param  array                                    $compareAttributes
-     * @param  array                                    $attributes
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function search($input, $compareAttributes = ['*'], $attributes = ['*'])
+    protected function querySearch($query)
     {
-        $query = $this->query();
-
-        $compareAttributes = $compareAttributes ?: ['*'];
+        $input             = $this->search['input'];
+        $compareAttributes = $this->search['compare_attributes'];
 
         if ($compareAttributes == ['*']) {
             $compareAttributes = Schema::getColumnListing($this->model->getTable());
@@ -811,6 +823,21 @@ class BaseRepositoryEloquent implements RepositoryInterface
 
         $query->whereRaw('('.join(' OR ', $sqls).')');
 
-        return $query->get($this->finalAttributes($attributes));
+        return $query;
+    }
+
+    /**
+     * Search any input against the given attributes.
+     *
+     * @param  string $input
+     * @param  array  $compareAttributes
+     * @return $this
+     */
+    public function search($input, $compareAttributes = ['*'])
+    {
+        $this->search['input']              = $input;
+        $this->search['compare_attributes'] = $compareAttributes;
+
+        return $this;
     }
 }

@@ -230,10 +230,9 @@ interface RepositoryInterface
     /**
      * Search any input against the given attributes.
      *
-     * @param  string  $input
+     * @param  string $input
      * @param  array  $compareAttributes
-     * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return $this
      */
-    public function search($text, $compareAttributes = ['*'], $attributes = ['*']);
+    public function search($text, $compareAttributes = ['*']);
 }
