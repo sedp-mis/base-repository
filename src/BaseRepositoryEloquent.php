@@ -720,14 +720,19 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function applyQueryParams($request)
     {
-        $pagelo = new PageLimitOffset($request->get('per_page', $this->perPage), $request->get('page'));
-
         $this->with($request->get('relations', []))
             ->attributes($request->get('attributes', ['*']))
             ->filters($request->get('filters', []))
-            ->sort($request->get('sort', []))
-            ->limit($pagelo->limit())
-            ->offset($pagelo->offset());
+            ->sort($request->get('sort', []));
+
+        if (!$request->get('all_records')) {
+            $pagelo = new PageLimitOffset($request->get('per_page', $this->perPage), $request->get('page'));
+
+            $this->limit($pagelo->limit())
+                ->offset($pagelo->offset());
+        }
+        
+        
 
         if ($request->has('search')) {
             $searchParams = $request->get('search', ['input' => null, 'compare' => ['*']]);
