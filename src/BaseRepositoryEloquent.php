@@ -91,7 +91,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
     /**
      * Default per page.
      *
-     * @var integer
+     * @var int
      */
     protected $perPage = 15;
 
@@ -731,8 +731,6 @@ class BaseRepositoryEloquent implements RepositoryInterface
             $this->limit($pagelo->limit())
                 ->offset($pagelo->offset());
         }
-        
-        
 
         if ($request->has('search')) {
             $searchParams = $request->get('search', ['input' => null, 'compare' => ['*']]);
