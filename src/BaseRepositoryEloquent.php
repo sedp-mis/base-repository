@@ -89,6 +89,13 @@ class BaseRepositoryEloquent implements RepositoryInterface
     protected $validation;
 
     /**
+     * Default per page.
+     *
+     * @var integer
+     */
+    protected $perPage = 15;
+
+    /**
      * Set the repository model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
@@ -97,6 +104,19 @@ class BaseRepositoryEloquent implements RepositoryInterface
     public function setModel($model)
     {
         $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Set the default per page.
+     *
+     * @param  int $perPage
+     * @return $this
+     */
+    public function setPerPage($perPage)
+    {
+        $this->perPage = $perPage;
 
         return $this;
     }
@@ -700,7 +720,7 @@ class BaseRepositoryEloquent implements RepositoryInterface
      */
     public function applyQueryParams($request)
     {
-        $pagelo = new PageLimitOffset($request->get('per_page', 15), $request->get('page'));
+        $pagelo = new PageLimitOffset($request->get('per_page', $this->perPage), $request->get('page'));
 
         $this->with($request->get('relations', []))
             ->attributes($request->get('attributes', ['*']))
